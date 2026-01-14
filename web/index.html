@@ -1488,7 +1488,40 @@ Date : 2025-12-21
         <div class="loader-bar-container">
             <div class="loader-bar" id="loader-bar"></div>
         </div>
-        <div class="mt-4 font-mono text-xs text-gray-500">v2.5.0 - PROD</div>
+        <div class="mt-4 font-mono text-xs text-gray-500"><span id="version-label">v1.0.0</span> - <span id="env-tag">PROD</span></div>
+        <script>
+            (function() {
+                // Environment Detection
+                const isDev = ['localhost', '127.0.0.1'].includes(window.location.hostname) || window.location.hostname.endsWith('.local');
+                if (isDev) {
+                    const tag = document.getElementById('env-tag');
+                    if (tag) tag.textContent = 'DEV';
+                }
+
+                // Version Animation (Decoding Effect)
+                const target = 'v1.0.0';
+                const label = document.getElementById('version-label');
+                if (label) {
+                    const chars = '0123456789VX.'; 
+                    let iteration = 0;
+                    const interval = setInterval(() => {
+                        label.textContent = target.split('')
+                            .map((char, index) => {
+                                if (index < iteration) return target[index];
+                                return chars[Math.floor(Math.random() * chars.length)];
+                            })
+                            .join('');
+                        
+                        if (iteration >= target.length) {
+                            clearInterval(interval);
+                            label.textContent = target; 
+                        }
+                        
+                        iteration += 1/4; // Adjust speed here
+                    }, 50);
+                }
+            })();
+        </script>
     </div>
 
     <!-- Cursor SVG custom Neo-brutalist -->
