@@ -3181,6 +3181,176 @@ Date : 2025-12-21
                 </div>
             </div>
         </section>
+        </section>
+
+        <!-- View Legal -->
+        <section id="view-legal" class="view-section">
+            <div class="max-w-5xl mx-auto px-4 py-10">
+                <div class="border-4 border-black bg-white p-8 relative shadow-hard">
+                    <div class="flex flex-col md:flex-row justify-between items-end mb-12 border-b-4 border-black pb-6">
+                        <div>
+                            <span class="bg-black text-white px-2 py-1 font-mono text-xs font-bold uppercase mb-2 inline-block">DOCUMENT #99-LEGAL</span>
+                            <h1 class="text-5xl md:text-7xl font-black uppercase leading-none">JURIDIQUE & <br><span class="text-brand-main text-outline">TECHNIQUE</span></h1>
+                        </div>
+                        <div class="text-right mt-4 md:mt-0 font-mono text-xs opacity-70">
+                            <p>DERNIÈRE MISE À JOUR: 01/01/2026</p>
+                            <p>STATUS: APP_ROBLOX_COMPLIANT</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                        <button onclick="scrollToLegal('legal-mentions')" class="border-2 border-black p-3 text-center font-bold hover:bg-black hover:text-white transition-colors uppercase text-xs md:text-sm">
+                            Mentions & Hébergement
+                        </button>
+                        <button onclick="scrollToLegal('legal-cgu')" class="border-2 border-black p-3 text-center font-bold hover:bg-black hover:text-white transition-colors uppercase text-xs md:text-sm">
+                            CGU (Utilisation)
+                        </button>
+                        <button onclick="scrollToLegal('legal-cgv')" class="border-2 border-black p-3 text-center font-bold hover:bg-black hover:text-white transition-colors uppercase text-xs md:text-sm">
+                            CGV (Boutique)
+                        </button>
+                        <button onclick="scrollToLegal('legal-lexicon')" class="border-2 border-black p-3 text-center font-bold hover:bg-black hover:text-white transition-colors uppercase text-xs md:text-sm">
+                            Lexique & Tech
+                        </button>
+                    </div>
+
+                    <script>
+                        function scrollToLegal(id) {
+                            const element = document.getElementById(id);
+                            if (element) {
+                                // Scroll avec décalage pour ne pas être caché par le header
+                                const y = element.getBoundingClientRect().top + window.scrollY - 150; 
+                                window.scrollTo({top: y, behavior: 'smooth'});
+                            }
+                        }
+                    </script>
+
+                    <div class="space-y-12 font-mono text-sm text-justify" id="legal-content-container">
+                        
+                        <div id="legal-mentions" class="legal-block">
+                            <h2 class="text-2xl font-black uppercase mb-4 bg-black text-white inline-block px-2 transform -rotate-1">1. MENTIONS LÉGALES & HÉBERGEMENT</h2>
+                            <div class="border-l-4 border-gray-300 pl-4 space-y-4">
+                                <p><strong class="uppercase">Éditeur du Service :</strong><br>
+                                Le serveur "ALBI RP" est une œuvre de fiction interactive non-commerciale (Fan Game).<br>
+                                Directeur de la publication : Aïssa BELKOUSSA (Alias ALBI STAFF).<br>
+                                Contact : <a href="mailto:contact@albirp.com" class="underline">contact@albirp.com</a></p>
+                                
+                                <div class="bg-gray-100 p-3 text-xs font-mono border-2 border-gray-200">
+                                    <p class="mb-2"><strong class="uppercase text-black">INFRASTRUCTURE DE JEU (ROBLOX) :</strong><br>
+                                    Hébergé par <strong>Roblox Corporation</strong><br>
+                                    970 Park Place, Suite 100, San Mateo, California 94403, USA.<br>
+                                    Tel : (888) 858-2569</p>
+
+                                    <p class="mb-2"><strong class="uppercase text-black">HÉBERGEMENT WEB (FRONTEND) :</strong><br>
+                                    Hébergé par <strong>Vercel Inc.</strong><br>
+                                    340 S Lemon Ave #4133, Walnut, CA 91789, USA.</p>
+
+                                    <p><strong class="uppercase text-black">REPOSITORY & VERSIONNING :</strong><br>
+                                    Maintenu par <strong>GitHub Inc.</strong><br>
+                                    88 Colin P Kelly Jr St, San Francisco, CA 94107, USA.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="legal-cgu" class="legal-block mt-12">
+                            <h2 class="text-2xl font-black uppercase mb-4 bg-gray-800 text-white inline-block px-2">2. CONDITIONS GÉNÉRALES D'UTILISATION (CGU)</h2>
+                            <div class="border-l-4 border-gray-800 pl-4 space-y-4">
+                                <p><strong class="uppercase">Accès au Service :</strong><br>
+                                L'accès au serveur ALBI RP est un privilège, non un droit. L'équipe de modération se réserve le droit de restreindre l'accès (Whitelist, Ban) à tout utilisateur dont le comportement nuit à l'expérience de jeu (Trolling, Exploit, Haine), sans justification nécessaire.</p>
+
+                                <p><strong class="uppercase">Propriété des Comptes :</strong><br>
+                                Conformément aux ToS de Roblox, votre compte et les données associées sur nos serveurs (argent, items, véhicules) restent la propriété intellectuelle de ALBI RP. Vous disposez d'un droit d'usage précaire et révocable. La vente de contenu in-game contre de l'argent réel (Real Money Trading) est strictement interdite et entraîne un bannissement définitif.</p>
+
+                                <p><strong class="uppercase">Contenu Utilisateur (UGC) :</strong><br>
+                                En jouant sur ALBI RP, vous acceptez que vos interactions, voix et gameplay puissent être enregistrés à des fins de modération ou de création de contenu promotionnel.</p>
+                            </div>
+                        </div>
+
+                        <div id="legal-cgv" class="legal-block">
+                            <h2 class="text-2xl font-black uppercase mb-4 bg-brand-main text-black inline-block px-2 transform rotate-1">2. CONDITIONS DE VENTE (CGV)</h2>
+                            <div class="border-l-4 border-brand-main pl-4 space-y-4 bg-gray-50 p-4">
+                                <p><strong class="uppercase">Nature des Produits :</strong><br>
+                                Les "Packs", "Abonnements" et "Monnaies" vendus sur la boutique sont des biens virtuels immatériels (Virtual Items) utilisables uniquement sur le serveur ALBI RP. Ils ne confèrent aucun droit de propriété réel.</p>
+                                
+                                <p><strong class="uppercase">Politique de Remboursement :</strong><br>
+                                Conformément à l'article L221-28 du Code de la Consommation concernant le contenu numérique fourni sur un support immatériel, <span class="bg-red-200 font-bold px-1">aucun remboursement</span> ne sera effectué une fois le service livré (accès au grade, véhicule ou argent en jeu), sauf en cas de défaillance technique prouvée de notre part.</p>
+                                
+                                <p><strong class="uppercase">Perte de Données / Sanctions :</strong><br>
+                                L'achat de services ne protège pas l'utilisateur contre les sanctions (Ban, Wipe). En cas de bannissement pour non-respect du règlement, les biens virtuels sont perdus définitivement sans compensation.</p>
+                            </div>
+                        </div>
+
+                        <div id="legal-privacy" class="legal-block mt-12">
+                            <h2 class="text-2xl font-black uppercase mb-4 bg-blue-600 text-white inline-block px-2 transform -rotate-1">4. POLITIQUE DE CONFIDENTIALITÉ (RGPD)</h2>
+                            <div class="border-l-4 border-blue-600 pl-4 space-y-4 bg-blue-50 p-4">
+                                <p class="text-sm">Dans le cadre de votre expérience sur ALBI RP, nous collectons un minimum de données (Data Minimization).</p>
+                                
+                                <ul class="list-disc pl-5 font-mono text-xs space-y-2">
+                                    <li><strong>Données collectées :</strong> ID Discord, ID Roblox, Adresse IP (hachée), Logs de connexion, Historique des transactions boutique.</li>
+                                    <li><strong>Finalité :</strong> Sécurisation du compte, lutte contre la triche (Anti-Cheat), sauvegarde de la progression (Database).</li>
+                                    <li><strong>Droit d'accès :</strong> Conformément au RGPD, vous pouvez demander la suppression intégrale de vos données ("Droit à l'oubli") en contactant le support. Cela entraînera la perte définitive de votre progression.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div id="legal-lexicon" class="legal-block">
+                            <h2 class="text-2xl font-black uppercase mb-4 bg-gray-200 text-black inline-block px-2">3. CHARTE TECHNIQUE & LEXIQUE</h2>
+                            
+                            <div class="border-l-4 border-black bg-gray-100 p-4 mb-6 font-mono text-xs">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <i class="ri-book-mark-fill text-xl"></i>
+                                    <span class="font-bold uppercase underline decoration-2 decoration-brand-main underline-offset-2">NIVEAUX D'EXIGENCE (IETF STD)</span>
+                                </div>
+                                <p class="leading-relaxed text-justify opacity-90">
+                                    Les mots clés 
+                                    <span class="bg-black text-white px-1 font-bold">"DOIT"</span>, 
+                                    <span class="bg-black text-white px-1 font-bold">"NE DOIT PAS"</span>, 
+                                    "OBLIGATOIRE", "DEVRA", "NE DEVRA PAS", "DEVRAIT", "NE DEVRAIT PAS", "RECOMMANDÉ", "PEUT", et "OPTIONNEL" 
+                                    dans ce document doivent être interprétés comme décrit dans la 
+                                    <a href="https://www.ietf.org/rfc/rfc2119.txt" target="_blank" class="font-bold hover:bg-brand-main hover:text-black transition-colors underline">RFC 2119</a>.
+                                </p>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="border-2 border-black p-4">
+                                    <h3 class="font-bold border-b-2 border-black mb-2">FAIR PLAY (TECHNICAL)</h3>
+                                    <p class="text-xs mb-2">Désigne l'acceptation de la défaite ("Lose RP"). Techniquement, il est interdit de se déconnecter (Alt+F4) ou de respawn lors d'une scène active.</p>
+                                    <span class="text-[10px] text-red-500 font-bold">SANCTION: BAN AUTOMATIQUE (LOGS)</span>
+                                </div>
+                                <div class="border-2 border-black p-4">
+                                    <h3 class="font-bold border-b-2 border-black mb-2">METADATA (STREAMHACK)</h3>
+                                    <p class="text-xs mb-2">Utilisation d'informations externes (Discord, Twitch, Map Web) pour localiser un joueur. Nos logs croisent les positions GPS pour détecter ces anomalies.</p>
+                                    <span class="text-[10px] text-red-500 font-bold">SANCTION: WIPE TOTAL</span>
+                                </div>
+                                <div class="border-2 border-black p-4">
+                                    <h3 class="font-bold border-b-2 border-black mb-2">ASSETS & OPTIMISATION</h3>
+                                    <p class="text-xs">Les véhicules "Import" sont limités à 150k polygones pour garantir les FPS. Tout véhicule moddé dépassant cette limite technique sera supprimé sans préavis.</p>
+                                </div>
+                                <div class="border-2 border-black p-4">
+                                    <h3 class="font-bold border-b-2 border-black mb-2">DONNÉES PERSONNELLES</h3>
+                                    <p class="text-xs">Nous stockons : ID Discord, ID Roblox, IP (Dernière connexion), Logs de transaction. Ces données ne sont jamais vendues à des tiers.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="mt-16 border-t-4 border-black pt-8 text-center">
+                        <button onclick="generateLegalPDF(this)" 
+                            class="group relative inline-flex items-center justify-center px-8 py-3 bg-black text-white font-black uppercase tracking-widest overflow-hidden transition-all hover:bg-white hover:text-black border-2 border-black hover:shadow-hard">
+                            <span class="relative z-10 flex items-center gap-2">
+                                <i class="ri-file-download-fill text-xl"></i> Télécharger le Dossier Légal (PDF)
+                            </span>
+                        </button>
+                        <p class="mt-4 text-[10px] font-mono opacity-50">Document généré dynamiquement le <span id="legal-date"></span></p>
+                    </div>
+                </div>
+            </div>
+            
+            <script>
+                // Date automatique footer légal
+                document.getElementById('legal-date').innerText = new Date().toLocaleDateString();
+            </script>
+        </section>
     </div>
 
     <!-- Footer -->
@@ -3195,6 +3365,8 @@ Date : 2025-12-21
                 <div class="flex flex-col gap-2">
                     <a href="#" onclick="router('rules'); return false;"
                         class="footer-link hover:translate-x-2 transition-transform">RÈGLEMENT</a>
+                    <a href="#" onclick="router('legal'); return false;"
+                        class="footer-link hover:translate-x-2 transition-transform">MENTIONS LÉGALES</a>
                     <a href="#" onclick="router('shop'); return false;"
                         class="footer-link hover:translate-x-2 transition-transform">BOUTIQUE</a>
                     <a href="#" onclick="router('vote'); return false;"
@@ -3229,7 +3401,8 @@ Date : 2025-12-21
                         Serveur Roblox Whitelist<br>
                         Serious RP FR<br>
                         Start RP Débutant<br>
-                        Meilleur serveur Roblox 2026
+                        Meilleur serveur Roblox <span id="dynamic-year">2026</span>
+                        <script>(function(){const y=document.getElementById('dynamic-year');if(y)y.textContent=new Date().getFullYear();})();</script>
                     </div>
                     <div>
                         <strong class="text-gray-400 block mb-1">LÉGAL & JOBS</strong>
@@ -3354,6 +3527,12 @@ Date : 2025-12-21
                 cmd: 'fetch_criminals -all',
                 color: 'text-brand-sec',
                 status: 'WARNING'
+            },
+            'legal': {
+                path: ['ROOT', 'SYSTEM', 'LEGAL_ARCHIVES'],
+                cmd: 'sudo read_contracts.pdf',
+                color: 'text-white', // Blanc neutre pour l'administratif
+                status: 'ENCRYPTED'
             },
             'jobs': {
                 path: ['ROOT', 'CITY', 'EMPLOYMENT_CENTER'],
@@ -4757,6 +4936,115 @@ Date : 2025-12-21
                     btnElement.disabled = false;
                 }, 1000);
             };
+
+        // --- GÉNÉRATEUR PDF LÉGAL (CGV & MENTIONS) ---
+        window.generateLegalPDF = async function (btnElement) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            const originalText = btnElement.innerHTML;
+            btnElement.innerHTML = "GÉNÉRATION DU DOSSIER...";
+            btnElement.classList.add("animate-pulse");
+            btnElement.disabled = true;
+
+            const pageWidth = doc.internal.pageSize.getWidth();
+            const pageHeight = doc.internal.pageSize.getHeight();
+            const margin = 20;
+            let y = 20;
+
+            // Header Helper
+            function drawHeader(title) {
+                doc.setFillColor(0, 0, 0); // Noir
+                doc.rect(0, 0, pageWidth, 15, 'F');
+                doc.setTextColor(255, 255, 255);
+                doc.setFontSize(8);
+                doc.setFont("courier", "bold");
+                doc.text("ALBI RP™ // LEGAL DEPARTMENT // CLASSIFIED", 10, 10);
+                doc.text(new Date().toLocaleDateString(), pageWidth - 30, 10);
+                
+                y = 30;
+                doc.setTextColor(0, 0, 0);
+            }
+
+            // --- PAGE 1 : MENTIONS LÉGALES ---
+            drawHeader();
+            
+            doc.setFontSize(22);
+            doc.setFont("helvetica", "bold");
+            doc.text("MENTIONS LÉGALES & CGV", margin, y);
+            
+            y += 10;
+            doc.setLineWidth(0.5);
+            doc.line(margin, y, pageWidth - margin, y);
+            y += 15;
+
+            // Contenu Mentions
+            const sections = [
+                {
+                    title: "1. ÉDITEUR DU SERVICE",
+                    content: "ALBI RP est un projet communautaire bénévole sur Roblox. Non affilié à Roblox Corp. Responsable de publication : L'équipe ALBI STAFF."
+                },
+                {
+                    title: "2. HÉBERGEMENT",
+                    content: "Infrastructure de jeu : Roblox Corporation (USA).\nSite Web : Vercel / GitHub Pages."
+                },
+                {
+                    title: "3. PROPRIÉTÉ INTELLECTUELLE",
+                    content: "Toute reproduction du mapping, des scripts ou de l'interface graphique sans autorisation écrite est interdite. Les marques citées (ex: Audi, Nike) restent la propriété de leurs détenteurs respectifs (Fair Use)."
+                }
+            ];
+
+            sections.forEach(sec => {
+                doc.setFontSize(12);
+                doc.setFont("helvetica", "bold");
+                doc.text(sec.title, margin, y);
+                y += 7;
+                
+                doc.setFontSize(10);
+                doc.setFont("courier", "normal");
+                const splitText = doc.splitTextToSize(sec.content, pageWidth - (margin * 2));
+                doc.text(splitText, margin, y);
+                y += (splitText.length * 5) + 10;
+            });
+
+            // --- PAGE 2 : CGV ---
+            doc.addPage();
+            drawHeader();
+            y = 30; // Reset Y après header
+
+            doc.setFontSize(16);
+            doc.setFont("helvetica", "bold");
+            doc.setTextColor(220, 20, 60); // Rouge pour CGV
+            doc.text("CONDITIONS GÉNÉRALES DE VENTE", margin, y);
+            doc.setTextColor(0);
+            y += 15;
+
+            const cgvData = "ARTICLE 1 - OBJET\nLes présentes conditions régissent les ventes de biens virtuels (in-game items) sur la boutique ALBI RP.\n\nARTICLE 2 - PRIX\nLes prix sont indiqués en Euros (€). ALBI RP se réserve le droit de modifier ses prix à tout moment.\n\nARTICLE 3 - LIVRAISON\nLa livraison est instantanée et automatisée après validation du paiement (Stripe/Crypto).\n\nARTICLE 4 - RÉTRACTATION (IMPORTANT)\nConformément à l'article L221-28 du Code de la Consommation, le droit de rétractation ne peut être exercé pour les contrats de fourniture d'un contenu numérique non fourni sur un support matériel. En validant la commande, le client renonce expressément à son droit de rétractation.\n\nARTICLE 5 - RESPONSABILITÉ\nEn cas de bannissement du serveur pour non-respect des règles, aucun remboursement ne sera effectué.";
+
+            doc.setFont("courier", "normal");
+            doc.setFontSize(10);
+            const splitCGV = doc.splitTextToSize(cgvData, pageWidth - (margin * 2));
+            doc.text(splitCGV, margin, y);
+
+            // Footer Signature
+            y = pageHeight - 40;
+            doc.setDrawColor(0);
+            doc.rect(margin, y, pageWidth - (margin * 2), 25);
+            doc.setFontSize(8);
+            doc.text("DOCUMENT CERTIFIÉ PAR TIMESTAMP NUMÉRIQUE", margin + 5, y + 10);
+            doc.text("SESSION ID: " + (document.getElementById('session-id')?.innerText || "UNKNOWN"), margin + 5, y + 15);
+            doc.setFont("courier", "bold");
+            doc.text("SIGNATURE AUTOMATIQUE SYSTEM_ALBI", margin + 5, y + 20);
+
+            doc.save("ALBIRP_LEGAL_DOCS.pdf");
+
+            // Reset bouton
+            setTimeout(() => {
+                btnElement.innerHTML = originalText;
+                btnElement.classList.remove("animate-pulse");
+                btnElement.disabled = false;
+            }, 1000);
+        };
         });
     </script>
 
