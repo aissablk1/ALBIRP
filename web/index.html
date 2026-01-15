@@ -7339,6 +7339,64 @@ Date : 2025-12-21
             console.log("✅ LINK MANAGER: Liens mis à jour avec succès.");
         });
     </script>
+    <div id="live-widget" class="fixed bottom-6 left-6 z-[9999] transition-all duration-1000 opacity-0 translate-y-4 mix-blend-difference pointer-events-none hidden md:flex items-center gap-4">
+        <div class="relative flex h-3 w-3">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#2563EB] opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-3 w-3 bg-[#2563EB] shadow-[0_0_10px_#2563EB]"></span>
+        </div>
+        
+        <span class="font-mono text-xs font-bold text-white tracking-[0.2em] uppercase">
+            <span id="live-count" class="transition-opacity duration-300">CONNECTING...</span> ONLINE
+        </span>
+    </div>
+
+    <script>
+        (function() {
+            const countEl = document.getElementById('live-count');
+            const widget = document.getElementById('live-widget');
+            
+            // CONFIGURATION
+            const INVITE_CODE = 'eVn8pKYwQy'; // Votre code d'invitation ALBI RP (récupéré de votre fichier)
+            const REFRESH_RATE = 30000;     // Rafraîchissement toutes les 30 sec (Respect API Discord)
+
+            async function fetchLiveCount() {
+                try {
+                    // Appel API Discord via un Proxy CORS haute performance (Nécessaire pour le client-side pur)
+                    const response = await fetch(`https://corsproxy.io/?https://discord.com/api/v9/invites/${INVITE_CODE}?with_counts=true`);
+                    
+                    if (!response.ok) throw new Error('API Error');
+                    
+                    const data = await response.json();
+                    
+                    if (data && data.approximate_presence_count) {
+                        const count = data.approximate_presence_count;
+                        
+                        // Mise à jour fluide du DOM
+                        if (countEl.innerText !== count.toString()) {
+                            countEl.style.opacity = '0'; // Fade out
+                            setTimeout(() => {
+                                countEl.innerText = count;
+                                countEl.style.opacity = '1'; // Fade in
+                                
+                                // Révéler le widget au premier chargement réussi
+                                widget.classList.remove('opacity-0', 'translate-y-4');
+                            }, 300);
+                        }
+                    }
+                } catch (error) {
+                    console.warn('[LIVE WIDGET] Connection lost via Discord API. Retrying...');
+                    // En cas d'erreur (AdBlock, Network), on ne cache pas le widget s'il a déjà une valeur, 
+                    // sinon on le laisse caché (fail-safe).
+                }
+            }
+
+            // Initialisation
+            fetchLiveCount();
+            
+            // Boucle de mise à jour (Polling intelligent)
+            setInterval(fetchLiveCount, REFRESH_RATE);
+        })();
+    </script>
 </body>
 
 </html>
