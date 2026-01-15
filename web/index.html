@@ -345,8 +345,8 @@ Date : 2025-12-21
             }
         }
 
-        /* --- CRT EFFECT AVANCÉ --- */
-
+        /* --- CRT EFFECT AVANCÉ (PATCH DIRECTION BAS -> HAUT) --- */
+        
         /* Couche 1 : Scanlines (Texture) */
         .crt::before {
             content: " ";
@@ -358,7 +358,7 @@ Date : 2025-12-21
             right: 0;
             background: linear-gradient(to bottom,
                     rgba(18, 16, 16, 0) 50%,
-                    rgba(0, 0, 0, 0.125) 50%);
+                    rgba(0, 0, 0, 0.25) 50%);
             background-size: 100% 2px;
             z-index: 9998;
             pointer-events: none;
@@ -375,48 +375,32 @@ Date : 2025-12-21
             right: 0;
             z-index: 9999;
             pointer-events: none;
-
-            /* Composition : Vignetage + Barre de lumière mobile */
+            
             background:
-                /* 1. Vignetage (Coins sombres) */
-                radial-gradient(circle, rgba(0, 0, 0, 0) 85%, rgba(0, 0, 0, 0.05) 100%),
-                /* 2. Rolling Light Leak (Barre lumineuse qui descend) */
+                /* 1. Vignetage (Fixe) */
+                radial-gradient(circle, rgba(0, 0, 0, 0) 85%, rgba(0, 0, 0, 0.15) 100%),
+                /* 2. Rolling Light Leak (Barre) - Opacité boostée à 0.20 */
                 linear-gradient(to bottom,
                     rgba(255, 255, 255, 0) 0%,
-                    rgba(255, 255, 255, 0) 40%,
-                    rgba(255, 255, 255, 0.05) 50%,
-                    rgba(255, 255, 255, 0) 60%,
+                    rgba(255, 255, 255, 0.20) 50%,
                     rgba(255, 255, 255, 0) 100%);
-            background-size: 100% 100%, 100% 200%;
-            /* La barre fait 2x la hauteur pour défiler */
-
-            /* Animation composite : Scintillement + Défilement de la barre */
-            animation: crt-flicker 0.15s infinite, crt-scan 8s linear infinite;
+            
+            /* Taille : La barre fait 60% de la hauteur de vue (60vh) */
+            background-size: 100% 100%, 100% 60vh;
+            
+            /* Animation : Flicker rapide + Scan continu de 3 secondes */
+            animation: crt-flicker 0.15s infinite, crt-scan 3s linear infinite;
         }
 
-        /* Animation du Scintillement (Flicker) */
-        @keyframes crt-flicker {
-            0% {
-                opacity: 0.95;
-            }
-
-            50% {
-                opacity: 0.92;
-            }
-
-            100% {
-                opacity: 0.96;
-            }
-        }
-
-        /* Animation de la barre de rafraîchissement (Rolling Scan) */
+        /* Animation de la barre (Mouvement Bas vers Haut CONTINU) */
         @keyframes crt-scan {
             0% {
-                background-position: 0% 0%, 0% -100%;
+                /* La barre commence décalée vers le bas (60vh) */
+                background-position: 0 0, 0 60vh;
             }
-
             100% {
-                background-position: 0% 0%, 0% 200%;
+                /* La barre remonte jusqu'à 0 */
+                background-position: 0 0, 0 0;
             }
         }
 
@@ -926,115 +910,77 @@ Date : 2025-12-21
             }
         }
 
-        /* --- SCROLLBAR DYNAMIQUE (PATCH FORCE MAC/SAFARI) --- */
-        /* Webkit (Chrome, Safari, Edge, Opera) - Version améliorée avec fallbacks */
+        /* --- SCROLLBAR DYNAMIQUE & THÉMATISÉE (PATCH V3) --- */
+        
+        /* 1. Webkit (Chrome, Safari, Edge) - Design Avancé & Dynamique */
         html ::-webkit-scrollbar,
         ::-webkit-scrollbar {
-            width: var(--scrollbar-width, 14px) !important;
-            /* Fallback 14px si variable manquante */
-            height: var(--scrollbar-width, 14px) !important;
+            width: var(--scrollbar-width, 12px) !important;
+            height: var(--scrollbar-width, 12px) !important;
             display: block !important;
-            /* Force l'affichage sur Mac/Safari */
-            -webkit-appearance: none !important;
-            /* Désactive le style natif */
-            background: var(--color-bg) !important;
-            /* Fallback blanc */
+            /* Utilise le fond dynamique de la page */
+            background: var(--color-bg) !important; 
         }
 
+        /* La Piste (Track) */
         html ::-webkit-scrollbar-track,
         ::-webkit-scrollbar-track {
+            /* Dégradé subtil avec les couleurs du thème (Background -> Accent -> Background) */
             background: linear-gradient(180deg, var(--color-bg) 0%, var(--color-accent) 50%, var(--color-bg) 100%) !important;
+            
+            /* Bordure gauche colorée avec la couleur PRINCIPALE du thème */
             border-left: 3px solid var(--color-main) !important;
-            /* Bordures épaissies pour visibilité */
-            box-shadow: inset 0 0 10px color-mix(in srgb, var(--color-text, #000000) 30%, transparent) !important;
-            -webkit-appearance: none !important;
+            
+            /* Ombre interne utilisant la couleur du TEXTE pour le contraste */
+            box-shadow: inset 0 0 10px color-mix(in srgb, var(--color-text) 30%, transparent) !important;
         }
 
+        /* Le Curseur (Thumb) */
         html ::-webkit-scrollbar-thumb,
         ::-webkit-scrollbar-thumb {
+            /* Dégradé dynamique (Principal -> Secondaire -> Accent) */
             background: linear-gradient(180deg, var(--color-main) 0%, var(--color-sec) 50%, var(--color-accent) 100%) !important;
-            border: 3px solid var(--color-text, #000000) !important;
-            /* Bordures épaissies */
+            
+            /* Bordure utilisant la couleur du TEXTE */
+            border: 2px solid var(--color-text) !important;
             border-radius: 4px !important;
-            box-shadow:
+            
+            /* Effet de brillance avec la couleur PRINCIPALE */
+            box-shadow: 
                 inset 2px 2px 0px color-mix(in srgb, var(--color-bg) 30%, transparent),
-                0 0 8px var(--color-main),
-                inset 0 0 10px color-mix(in srgb, var(--color-text, #000000) 20%, transparent) !important;
+                0 0 8px var(--color-main) !important;
+                
             transition: all 0.3s ease !important;
             min-height: 40px !important;
-            /* Taille min pour ne pas disparaître sur Mac */
-            -webkit-appearance: none !important;
         }
 
+        /* Interaction : Survol (Hover) */
         html ::-webkit-scrollbar-thumb:hover,
         ::-webkit-scrollbar-thumb:hover {
+            /* Inversion des couleurs pour l'effet visuel */
             background: linear-gradient(180deg, var(--color-sec) 0%, var(--color-accent) 50%, var(--color-main) 100%) !important;
-            box-shadow:
-                inset 2px 2px 0px color-mix(in srgb, var(--color-bg) 50%, transparent),
-                0 0 15px var(--color-sec),
-                inset 0 0 15px color-mix(in srgb, var(--color-bg) 10%, transparent) !important;
+            border-color: var(--color-main) !important;
             transform: scaleX(1.1) !important;
         }
 
+        /* Interaction : Clic (Active) */
         html ::-webkit-scrollbar-thumb:active,
         ::-webkit-scrollbar-thumb:active {
-            background: linear-gradient(180deg, var(--color-accent) 0%, var(--color-main) 50%, var(--color-sec) 100%) !important;
-            box-shadow:
-                inset 2px 2px 0px color-mix(in srgb, var(--color-bg) 60%, transparent),
-                0 0 20px var(--color-accent) !important;
+            background: var(--color-accent) !important;
+            border-color: var(--color-sec) !important;
         }
 
-        /* Coin en bas à droite (intersection de deux scrollbars) */
+        /* Coin (Intersection) */
         html ::-webkit-scrollbar-corner,
         ::-webkit-scrollbar-corner {
             background: var(--color-bg) !important;
-            /* Fond au lieu de transparent pour meilleure visibilité */
-            -webkit-appearance: none !important;
         }
 
-        /* Firefox - Ciblage HTML spécifique pour éviter les conflits */
+        /* 2. Firefox (Standard W3C) - Support natif des variables */
         html {
             scrollbar-width: thin !important;
+            /* C'est ici que la magie opère pour Firefox : on lie directement les variables */
             scrollbar-color: var(--color-main) var(--color-bg) !important;
-        }
-
-        /* Fallback pour les navigateurs qui ne supportent pas scrollbar-color */
-        @supports not (scrollbar-color: red blue) {
-            html {
-                scrollbar-width: thin;
-            }
-        }
-
-        /* Fallback pour les navigateurs qui ne supportent pas color-mix() */
-        @supports not (color: color-mix(in srgb, red 50%, blue)) {
-
-            html ::-webkit-scrollbar-track,
-            ::-webkit-scrollbar-track {
-                box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3) !important;
-            }
-
-            html ::-webkit-scrollbar-thumb,
-            ::-webkit-scrollbar-thumb {
-                box-shadow:
-                    inset 2px 2px 0px rgba(255, 255, 255, 0.3),
-                    0 0 8px var(--color-main),
-                    inset 0 0 10px rgba(0, 0, 0, 0.2) !important;
-            }
-
-            html ::-webkit-scrollbar-thumb:hover,
-            ::-webkit-scrollbar-thumb:hover {
-                box-shadow:
-                    inset 2px 2px 0px rgba(255, 255, 255, 0.5),
-                    0 0 15px var(--color-sec),
-                    inset 0 0 15px rgba(255, 255, 255, 0.1) !important;
-            }
-
-            html ::-webkit-scrollbar-thumb:active,
-            ::-webkit-scrollbar-thumb:active {
-                box-shadow:
-                    inset 2px 2px 0px rgba(255, 255, 255, 0.6),
-                    0 0 20px var(--color-accent) !important;
-            }
         }
 
 
@@ -1361,7 +1307,7 @@ Date : 2025-12-21
                         "gamePlatform": ["PC", "Roblox"],
                         "applicationCategory": "Game",
                         "operatingSystem": "Windows, macOS, iOS, Android",
-                        "keywords": "Roblox RP, FiveM, Albi, Roleplay, Serious RP, Whitelist, Serveur RP France",
+                        "keywords": "Roblox RP, Roblox, Albi, Roleplay, Serious RP, Whitelist, Serveur RP France",
                         "url": "https://albirp.com",
                         "image": "https://albirp.com/assets/banner-og.jpg",
                         "author": {
@@ -1418,7 +1364,7 @@ Date : 2025-12-21
                             }
                         }, {
                             "@type": "Question",
-                            "name": "ALBI RP™ est-il un serveur Roblox ou FiveM ?",
+                            "name": "ALBI RP™ est-il un serveur Roblox ou Roblox ?",
                             "acceptedAnswer": {
                             "@type": "Answer",
                             "text": "ALBI RP™ est un serveur Roblox Roleplay. Il s'agit d'une expérience de jeu de rôle multijoueur sur la plateforme Roblox, basée sur la ville d'Albi en Occitanie, France."
@@ -1430,29 +1376,80 @@ Date : 2025-12-21
 
 <body class="bg-brand-bg text-brand-text font-sans crt relative transition-colors duration-300">
 
-    <div id="qr-overlay" class="hidden fixed inset-0 z-[200] bg-black/95 flex-col items-center justify-center p-4 backdrop-blur-md transition-opacity duration-300">
-        <img id="qr-fullscreen-img" src="" alt="QR Code Rescue" class="w-64 h-64 border-4 border-white shadow-[0_0_30px_rgba(255,255,255,0.5)] mb-8 bg-white">
+    <!-- RESOLUTION LOCKDOWN (Red Screen of Death) -->
+    <div id="resolution-lockdown">
+        <i class="ri-error-warning-fill text-8xl md:text-9xl text-black mb-6 animate-pulse"></i>
         
-        <button onclick="toggleQRFullscreen(false)" 
-            class="text-white font-black bg-red-600 px-6 py-3 transform -rotate-1 border-2 border-white hover:scale-110 transition-transform shadow-hard uppercase tracking-widest cursor-pointer">
-            TAP TO CLOSE X
-        </button>
+        <h1 class="text-3xl md:text-5xl font-black text-black bg-white px-6 py-2 transform -rotate-2 mb-8 border-4 border-black shadow-[8px_8px_0px_black]">
+            FATAL ERROR
+        </h1>
         
-        <p class="text-white font-mono text-xs mt-8 animate-pulse">SCANNER POUR RÉCUPÉRATION SESSION MOBILE</p>
+        <div class="font-mono font-bold text-black text-xs md:text-sm bg-white border-2 border-black p-4 max-w-sm w-full shadow-[8px_8px_0px_black] relative z-10 flex flex-col gap-4">
+            <div>
+            <div class="border-b-2 border-black pb-2 mb-2 flex justify-between">
+                <span>SYSTEM_HALT</span>
+                <span class="text-red-600 animate-pulse">CRITICAL</span>
+            </div>
+            
+                <p class="mb-1 text-xs">> DETECTING_VIEWPORT...</p>
+                <p class="mb-2 bg-black text-white px-1 inline-block text-xs">FAIL: DIMENSIONS_INVALID</p>
+            
+                <p class="border-l-4 border-red-500 pl-2 leading-tight text-xs">
+                L'interface ALBI RP™ nécessite une surface d'affichage supérieure.
+            </p>
+            </div>
+            
+            <div class="bg-gray-100 p-2 border border-black text-[10px] uppercase space-y-1">
+                <p>SOLUTION 1: PIVOTEZ VOTRE APPAREIL ↻</p>
+                <p>SOLUTION 2: AGRANDISSEZ LA FENÊTRE ↔</p>
+            </div>
+
+            <div class="border-2 border-black p-2 bg-brand-main text-center relative overflow-hidden group">
+                <div class="absolute inset-0 bg-[repeating-linear-gradient(45deg,transparent,transparent_2px,rgba(0,0,0,0.1)_2px,rgba(0,0,0,0.1)_4px)]"></div>
+                <p class="text-[10px] font-black uppercase mb-2 relative z-10">SOLUTION 3 : CHANGEZ D'APPAREIL</p>
+                
+                <div class="bg-white p-1 inline-block border-2 border-black relative z-10">
+                    <img id="rescue-qr" src="" alt="Scan Me" onclick="toggleQRFullscreen(true)" class="w-24 h-24 object-contain pixelated cursor-pointer hover:opacity-80 transition-opacity">
+                </div>
+                <p class="text-[9px] mt-1 relative z-10">SCANNEZ POUR OUVRIR</p>
+            </div>
+
+            <div class="pt-2 border-t-2 border-dashed border-black flex justify-between opacity-70 text-[10px]">
+                <span>REQ: >375x500</span>
+                <span id="current-res">READING...</span>
+            </div>
+        </div>
     </div>
 
+    <!-- OVERLAY QR CODE FULLSCREEN -->
+    <div id="qr-overlay" class="hidden fixed inset-0 z-[300000] bg-black/95 flex-col items-center justify-center p-4 cursor-pointer">
+        <div class="text-brand-main font-mono font-bold text-xl mb-4 animate-pulse text-center">
+            > SCAN_ME.EXE
+        </div>
+        
+        <div class="relative w-fit h-fit max-h-[70vh] max-w-[90vw] flex items-center justify-center border-4 border-white bg-white p-2">
+            <img id="qr-fullscreen-img" src="" class="w-full h-full object-contain pixelated" alt="QR Fullscreen">
+        </div>
+        
+        <div class="mt-6 text-center">
+            <p class="text-white font-black bg-red-600 px-4 py-2 inline-block transform -rotate-1 border-2 border-white text-sm">
+                TAP TO CLOSE X
+            </p>
+        </div>
+    </div>
+    
     <!-- GÉNÉRATEUR QR CODE D'URGENCE -->
     <script>
-            // --- GÉNÉRATEUR QR CODE D'URGENCE ---
-            (function initEmergencyQR() {
-                const qrImg = document.getElementById('rescue-qr');
-                if (qrImg) {
-                    // Utilisation de l'API publique goqr.me ou qrserver pour générer le QR sans librairie lourde
-                    // On encode l'URL actuelle du site
-                    const currentUrl = encodeURIComponent(window.location.href);
-                    qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&margin=0&data=${currentUrl}`;
-                }
-            })();
+        // --- GÉNÉRATEUR QR CODE D'URGENCE ---
+        (function initEmergencyQR() {
+            const qrImg = document.getElementById('rescue-qr');
+            if (qrImg) {
+                // Utilisation de l'API publique goqr.me ou qrserver pour générer le QR sans librairie lourde
+                // On encode l'URL actuelle du site
+                const currentUrl = encodeURIComponent(window.location.href);
+                qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&margin=0&data=${currentUrl}`;
+            }
+        })();
 
         // --- GESTION DU ZOOM QR CODE ---
         function toggleQRFullscreen(show) {
@@ -1871,31 +1868,192 @@ Date : 2025-12-21
 
         <!-- View Home -->
         <section id="view-home" class="view-section active">
+            
+            <!-- BACKGROUND GRID TACTICAL V2 -->
+            <div class="absolute inset-0 z-0 pointer-events-none overflow-hidden" id="grid-container">
+                <div class="absolute inset-0 opacity-[0.03]" 
+                     style="background-image: linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px); background-size: 40px 40px;">
+                </div>
+
+                <div id="grid-spotlight" class="absolute inset-0"
+                     style="
+                        background-image: linear-gradient(var(--color-main) 1px, transparent 1px), linear-gradient(90deg, var(--color-main) 1px, transparent 1px); 
+                        background-size: 40px 40px;
+                        opacity: 0.6;
+                        /* Le masque crée le trou de lumière autour de la souris */
+                        -webkit-mask-image: radial-gradient(350px circle at var(--x, 50%) var(--y, 50%), black 0%, transparent 100%);
+                        mask-image: radial-gradient(350px circle at var(--x, 50%) var(--y, 50%), black 0%, transparent 100%);
+                     ">
+                </div>
+            </div>
+            <script>
+                (function() {
+                    const section = document.getElementById('view-home');
+                    const spotlight = document.getElementById('grid-spotlight');
+
+                    if (section && spotlight) {
+                        section.addEventListener('mousemove', (e) => {
+                            // Calcul des coordonnées relatives à la section
+                            const rect = section.getBoundingClientRect();
+                            const x = e.clientX - rect.left;
+                            const y = e.clientY - rect.top;
+                            
+                            // Mise à jour des variables CSS (très performant)
+                            spotlight.style.setProperty('--x', `${x}px`);
+                            spotlight.style.setProperty('--y', `${y}px`);
+                        });
+                    }
+                })();
+            </script>
+
+            <!-- Header -->
             <header class=" flex flex-col justify-center items-center relative overflow-hidden px-4">
-                <div class="relative z-10 py-20 text-center flex flex-col items-center">
+                <div class="relative z-10 pb-20 text-center flex flex-col items-center">
+
+                    <!-- Badges -->
+                    <div class="flex items-center gap-3 mb-6 animate-fadeIn">
+                        <span class="bg-black text-white px-3 py-1 font-mono text-xs font-bold border-2 border-brand-main shadow-[4px_4px_0_var(--color-main)] flex items-center gap-2">
+                            <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+                            LIVE STATUS
+                        </span>
+                        <span class="bg-white text-black px-3 py-1 font-mono text-xs font-bold border-2 border-black">
+                            SEASON 1
+                        </span>
+                    </div>
+
+                    <!-- Subtitle -->
                     <h2 class="text-2xl md:text-4xl font-bold bg-black text-white inline-block px-4 py-1 mb-4 rotate-2">
                         L'ULTIME EXPÉRIENCE <span class="inline md:hidden">RP</span><span
-                            class="hidden md:inline">ROLEPLAY</span>
+                            class="hidden md:inline">ROLEPLAY <span class="text-brand-main">FRANÇAIS</span></span>
                     </h2>
+                    <!-- Title -->
                     <h1 class="text-7xl md:text-9xl font-black leading-none mb-6 tracking-tighter mix-blend-hard-light">
                         ALBI <span class="text-outline">RP</span>
                     </h1>
-                    <p
-                        class="text-xl md:text-3xl font-bold max-w-2xl mx-auto bg-white border-2 border-black p-4 shadow-hard transform -rotate-1">
-                        La Cité Épiscopale est tombée. Construis ton empire sur les briques rouges.
-                    </p>
-                    <div class="mt-12 flex justify-center gap-4">
-                        <button onclick="router('lore')"
-                            class="px-8 py-4 bg-brand-main border-4 border-black font-black text-xl shadow-hard hover:translate-y-1 hover:shadow-none transition-all uppercase">
-                            DÉCOUVRIR
+
+                    <div class="relative mb-12 max-w-3xl text-center transform hover:scale-105 -rotate-1 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-brand-main transform rotate-1 translate-y-2 translate-x-2 border-2 border-black"></div>
+                        <p class="relative bg-white border-2 border-black p-4 md:p-6 text-lg md:text-2xl font-bold text-black shadow-hard z-10">
+                            La Cité Épiscopale est tombée. <br class="hidden md:block">
+                            <span class="bg-black text-white px-2">Construis ton empire</span> sur les briques rouges.
+                        </p>
+                    </div>
+
+                    <!-- Buttons CTA (Call To Action) -->
+                    <div class="flex flex-col md:flex-row gap-6 items-center w-full max-w-2xl justify-center">
+                        <!-- Whitelist -->
+                        <button onclick="router('whitelist')" 
+                            class="relative w-full md:w-auto group bg-brand-main text-black px-8 py-5 font-black text-xl md:text-2xl border-4 border-black hover:bg-white hover:text-black transition-all shadow-hard hover:shadow-hard-lg hover:-translate-y-1 overflow-hidden">
+                            <div class="absolute top-0 -left-[100%] w-full h-full bg-gradient-to-r from-transparent via-white/50 to-transparent skew-x-[30deg] group-hover:animate-[shimmer_1s_infinite]"></div>
+                            
+                            <div class="relative z-10 flex flex-col items-center leading-none">
+                                <div class="flex items-center gap-3">
+                                    <span>REJOINDRE LA CITÉ</span>
+                                    <i class="ri-arrow-right-line group-hover:translate-x-2 transition-transform"></i>
+                                </div>
+                                <span class="text-[10px] font-mono opacity-100 uppercase tracking-widest font-bold">
+                                    Candidatures Ouvertes
+                                </span>
+                            </div>
+                        </button>
+
+                        <!-- LORE & ARCHIVES -->
+                        <button onclick="router('lore')" 
+                            class="relative w-full md:w-auto group bg-brand-sec text-black px-8 py-5 font-black text-xl md:text-2xl border-4 border-black hover:bg-black hover:text-white transition-all shadow-hard hover:shadow-hard-lg hover:-translate-y-1 overflow-hidden">
+                            
+                            <div class="absolute top-0 -left-[100%] w-full h-full bg-gradient-to-r from-transparent via-white/50 to-transparent skew-x-[30deg] group-hover:animate-[shimmer_1s_infinite]"></div>
+                            
+                            <div class="relative z-10 flex flex-col items-center leading-none">
+                                <div class="flex items-center gap-3 uppercase">
+                                    <i class="ri-book-read-line"></i>
+                                    <span>LIRE L'HISTOIRE</span>
+                                </div>
+                                <span class="text-[10px] font-mono opacity-100 uppercase tracking-widest font-bold">
+                                    LORE & ARCHIVES
+                                </span>
+                            </div>
                         </button>
                     </div>
+                    
+                    <!-- Social Proof (CRO - Animated) -->
+                    <div class="mt-6 flex items-center justify-center gap-2 font-mono text-sm font-bold opacity-0 animate-[fadeIn_0.5s_ease-out_0.8s_forwards]">
+                        <span class="text-green-600 animate-pulse text-xs">●</span>
+                        <span class="tracking-tight">
+                            +<span id="player-counter" data-target="1250">0</span> JOUEURS INSCRITS
+                        </span>
+                    </div>
+                    <div class="mt-3 flex items-center justify-center gap-4 opacity-0 animate-[fadeIn_0.5s_ease-out_1.2s_forwards]">
+                        
+                        <div class="flex -space-x-4">
+                            <div class="w-10 h-10 rounded-full border-2 border-black bg-brand-main z-30 overflow-hidden shadow-sm">
+                                <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Felix" alt="Joueur" class="w-full h-full object-cover">
+                            </div>
+                            <div class="w-10 h-10 rounded-full border-2 border-black bg-white z-20 overflow-hidden shadow-sm">
+                                <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Aneka" alt="Joueur" class="w-full h-full object-cover">
+                            </div>
+                            <div class="w-10 h-10 rounded-full border-2 border-black bg-brand-sec z-10 overflow-hidden shadow-sm flex items-center justify-center">
+                                <span class="pl-3 text-[10px] text-black">+99</span>
+                            </div>
+                        </div>
+                        
+                        <div class="text-left">
+                            <div class="flex text-yellow-400 text-xs mb-0.5" style="text-shadow: 1px 1px 0 #000;">
+                                <i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i>
+                            </div>
+                            <p class="font-mono text-[10px] font-bold uppercase text-gray-500 leading-none tracking-wider">
+                                NOTÉ 4.9/5 SUR DISCORD
+                            </p>
+                        </div>
+                    </div>
+                    <script>
+                        // Animation Compteur (High Performance)
+                        (function() {
+                            const counter = document.getElementById('player-counter');
+                            if (!counter) return;
+
+                            const target = parseInt(counter.getAttribute('data-target'));
+                            const duration = 2000; // Durée en ms
+
+                            const animateCounter = () => {
+                                const start = performance.now();
+                                
+                                const step = (currentTime) => {
+                                    const elapsed = currentTime - start;
+                                    const progress = Math.min(elapsed / duration, 1);
+                                    
+                                    // Easing : easeOutExpo (Effet freinage rapide à la fin)
+                                    const ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+                                    
+                                    const current = Math.floor(ease * target);
+                                    // Formatage "1,250" (US locale pour la virgule)
+                                    counter.innerText = current.toLocaleString('en-US');
+
+                                    if (progress < 1) {
+                                        requestAnimationFrame(step);
+                                    } else {
+                                        counter.innerText = "1,250"; // Valeur finale propre
+                                    }
+                                };
+                                requestAnimationFrame(step);
+                            };
+
+                            // Déclencheur (Uniquement quand l'élément est visible)
+                            const observer = new IntersectionObserver((entries) => {
+                                if (entries[0].isIntersecting) {
+                                    setTimeout(animateCounter, 300); // Petit délai pour laisser l'oeil arriver
+                                    observer.disconnect();
+                                }
+                            });
+                            observer.observe(counter);
+                        })();
+                    </script>
                 </div>
             </header>
 
-            <div id="scroll-trigger"
+            <!-- Scroll Trigger -->
+            <div id="scroll-trigger" 
                 class="py-20 bg-black text-white text-center border-y-8 border-white relative overflow-hidden group cursor-pointer"
-                onclick="router('factions')">
+                 onclick="router('factions')">
                 <div
                     class="absolute inset-0 opacity-20 bg-[radial-gradient(#fff_2px,transparent_2px)] [background-size:20px_20px]">
                 </div>
@@ -3360,6 +3518,164 @@ Date : 2025-12-21
                 document.getElementById('legal-date').innerText = new Date().toLocaleDateString();
             </script>
         </section>
+        
+        <!-- View Press / Media Kit -->
+        <section id="view-press" class="view-section">
+            <div class="max-w-7xl mx-auto px-4 py-10">
+                <div class="border-b-8 border-black pb-8 mb-12 flex flex-col md:flex-row justify-between items-end">
+                    <div>
+                        <span class="bg-black text-white px-4 py-1 font-mono font-bold uppercase mb-2 inline-block">POUR LES JOURNALISTES & CRÉATEURS</span>
+                        <h1 class="text-6xl md:text-8xl font-black uppercase leading-none">ESPACE <span class="text-brand-main text-outline">PRESSE</span></h1>
+                    </div>
+                    <div class="text-right mt-6 md:mt-0 font-mono text-xs opacity-70">
+                        <p>CONTACT PRESSE: contact@albirp.com</p>
+                        <p>Dernière mise à jour du kit: JANVIER 2026</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    
+                    <div class="md:col-span-2 space-y-8">
+                        <div class="border-4 border-black bg-white p-6 relative group">
+                            <div class="absolute -top-3 left-4 bg-brand-main text-black font-bold px-2 border-2 border-black text-xs uppercase">Description Courte (140 car.)</div>
+                            <p class="font-mono text-lg font-bold leading-relaxed selection:bg-brand-main selection:text-black" id="pitch-short">
+                                ALBI RP est une reconstitution numérique interactive de la Cité Épiscopale d'Albi sur Roblox, offrant une expérience de jeu de rôle immersive et éducative en monde ouvert.
+                            </p>
+                            <button onclick="navigator.clipboard.writeText(document.getElementById('pitch-short').innerText); if(typeof showToast !== 'undefined') showToast('COPIÉ', 'Texte copié dans le presse-papier')" 
+                                class="mt-4 text-xs font-black uppercase underline hover:text-brand-main cursor-pointer">
+                                [COPIER LE TEXTE]
+                            </button>
+                        </div>
+
+                        <div class="border-4 border-black bg-white p-6 relative group">
+                            <div class="absolute -top-3 left-4 bg-black text-white font-bold px-2 text-xs uppercase">À Propos (Presse)</div>
+                            <div class="font-mono text-sm space-y-4 text-justify" id="pitch-long">
+                                <p><strong>L'Initiative Numérique Locale :</strong><br>
+                                Lancé en 2025, ALBI RP est un projet ambitieux visant à valoriser le patrimoine tarnais auprès des jeunes générations via la plateforme mondiale Roblox (300M utilisateurs). Le projet recrée fidèlement les lieux emblématiques d'Albi (Cathédrale Sainte-Cécile, Palais de la Berbie, Place du Vigan) pour en faire le théâtre d'interactions sociales complexes.</p>
+                                <p><strong>Plus qu'un jeu :</strong><br>
+                                Au-delà du divertissement, ALBI RP initie à l'économie, à la gestion et à la citoyenneté numérique à travers un système de "Serious RP" (Jeu de rôle strict) encadré par une équipe de modération formée.</p>
+                            </div>
+                            <button onclick="navigator.clipboard.writeText(document.getElementById('pitch-long').innerText); if(typeof showToast !== 'undefined') showToast('COPIÉ', 'Texte copié dans le presse-papier')" 
+                                class="mt-4 text-xs font-black uppercase underline hover:text-brand-main cursor-pointer">
+                                [COPIER LE TEXTE]
+                            </button>
+                        </div>
+
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <div class="bg-black text-white p-4 text-center border-b-4 border-brand-main">
+                                <div class="text-3xl font-black text-brand-main">2025</div>
+                                <div class="text-[10px] font-mono uppercase">Année de Création</div>
+                            </div>
+                            <div class="bg-black text-white p-4 text-center border-b-4 border-brand-sec">
+                                <div class="text-3xl font-black text-brand-sec">15K+</div>
+                                <div class="text-[10px] font-mono uppercase">Membres Discord</div>
+                            </div>
+                            <div class="bg-black text-white p-4 text-center border-b-4 border-neo-blue">
+                                <div class="text-3xl font-black text-neo-blue">Fr/Qc</div>
+                                <div class="text-[10px] font-mono uppercase">Cible Francophone</div>
+                            </div>
+                            <div class="bg-black text-white p-4 text-center border-b-4 border-white">
+                                <div class="text-3xl font-black">PC/Mob</div>
+                                <div class="text-[10px] font-mono uppercase">Cross-Platform</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="md:col-span-1 space-y-6">
+                        <div class="bg-gray-100 border-4 border-black p-6 text-center">
+                            <h3 class="font-black text-xl mb-4 uppercase">ASSETS VISUELS</h3>
+                            
+                            <div class="mb-6 group cursor-pointer hover:opacity-80">
+                                <div class="h-32 bg-[url('https://albirp.com/assets/banner-og.jpg')] bg-cover bg-center border-2 border-black mb-2 relative">
+                                    <div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <i class="ri-download-cloud-2-fill text-3xl text-white"></i>
+                                    </div>
+                                </div>
+                                <p class="font-bold text-sm">LOGOS KIT (PNG/SVG)</p>
+                                <p class="text-xs text-gray-500">Noir, Blanc, Transparent</p>
+                            </div>
+
+                            <div class="group cursor-pointer hover:opacity-80">
+                                <div class="h-32 bg-brand-main border-2 border-black mb-2 relative overflow-hidden flex items-center justify-center">
+                                    <span class="font-black text-4xl opacity-20 rotate-12">4K</span>
+                                    <div class="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <i class="ri-download-cloud-2-fill text-3xl text-white"></i>
+                                    </div>
+                                </div>
+                                <p class="font-bold text-sm">SCREENSHOTS HD</p>
+                                <p class="text-xs text-gray-500">In-Game, Map, Personnages</p>
+                            </div>
+
+                            <button onclick="if(typeof showToast !== 'undefined') showToast('TÉLÉCHARGEMENT...', 'Le fichier .zip est en cours de préparation.')" 
+                                class="w-full mt-8 bg-black text-white py-3 font-bold hover:bg-brand-main hover:text-black border-2 border-transparent transition-all uppercase text-xs">
+                                TOUT TÉLÉCHARGER (.ZIP)
+                            </button>
+                        </div>
+
+                        <div class="border-2 border-black p-4 bg-brand-sec text-center shadow-hard-sm">
+                            <p class="font-bold text-xs mb-2">BESOIN D'UNE INTERVIEW ?</p>
+                            <a href="mailto:presse@albirp.com" class="font-black text-lg underline hover:text-white">presse@albirp.com</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- View Changelog -->
+        <section id="view-changelog" class="view-section">
+            <div class="max-w-5xl mx-auto px-4 py-10">
+                <div class="border-4 border-black bg-white p-8 relative shadow-hard">
+                    <div class="flex flex-col md:flex-row justify-between items-end mb-12 border-b-4 border-black pb-6">
+                        <div>
+                            <span class="bg-black text-white px-2 py-1 font-mono text-xs font-bold uppercase mb-2 inline-block">SYSTEM_LOGS</span>
+                            <h1 class="text-5xl md:text-7xl font-black uppercase leading-none">CHANGELOG <br><span class="text-brand-main text-outline">& PATCHS</span></h1>
+                        </div>
+                        <div class="text-right mt-4 md:mt-0 font-mono text-xs opacity-70">
+                            <p>VERSION ACTUELLE: 1.0.0</p>
+                            <p>STATUS: BUILDING...</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-8 font-mono">
+                        <!-- Entry 1 -->
+                        <div class="border-l-4 border-black pl-6 relative">
+                            <div class="absolute -left-[11px] top-0 w-5 h-5 bg-black rounded-full border-4 border-white"></div>
+                            <h3 class="text-xl font-bold uppercase mb-2">MISE À JOUR COURANTE</h3>
+                            <span class="text-xs bg-gray-200 px-2 py-1 mb-4 inline-block">EN COURS</span>
+                            
+                            <ul class="space-y-4">
+                                <li class="flex items-start gap-3">
+                                    <span class="text-red-500 font-bold">[!]</span>
+                                    <div>
+                                        <p class="font-bold">PROBLÈME D'AFFICHAGE (CRT)</p>
+                                        <p class="text-sm text-gray-600">La résolution de l'effet CRT est manquante ou incorrecte sur certains ratios.</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="text-red-500 font-bold">[!]</span>
+                                    <div>
+                                        <p class="font-bold">INTERFACE DE DÉFILEMENT (SCROLLBAR)</p>
+                                        <p class="text-sm text-gray-600">Le style de la scrollbar ne s'adapte pas encore dynamiquement aux thèmes.</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="text-red-500 font-bold">[!]</span>
+                                    <div>
+                                        <p class="font-bold">AJOUT DE THÈMES (DIVERSIFICATION)</p>
+                                        <p class="text-sm text-gray-600">Plusieurs thèmes seront ajoutés à des fins de diversification graphique.</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="mt-12 p-4 bg-gray-100 border-2 border-black text-center text-xs">
+                        <p class="uppercase font-bold">Pour rapporter un bug : <a href="https://discord.gg/albirp" target="_blank" class="underline hover:text-brand-main">Discord (Channel #bugs)</a></p>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 
     <!-- Footer -->
@@ -3381,12 +3697,14 @@ Date : 2025-12-21
                         class="footer-link hover:translate-x-2 transition-transform">VOTE</a>
                 </div>
                 <div class="flex flex-col gap-2">
-                    <a href="#" onclick="router('whitelist'); return false;"
-                        class="footer-link hover:translate-x-2 transition-transform">WHITELIST</a>
                     <a href="#" onclick="router('socials'); return false;"
                         class="footer-link hover:translate-x-2 transition-transform">COMMUNAUTÉ</a>
+                    <a href="#" onclick="router('press'); return false;" 
+                        class="footer-link hover:translate-x-2 transition-transform">ESPACE PRESSE</a>
                     <a href="#" onclick="router('events'); return false;"
                         class="footer-link hover:translate-x-2 transition-transform">EVENTS</a>
+                    <a href="#" onclick="router('changelog'); return false;" 
+                        class="footer-link hover:translate-x-2 transition-transform">CHANTIER & MAJ</a>
                 </div>
             </div>
         </div>
@@ -3467,6 +3785,50 @@ Date : 2025-12-21
                 </p>
             </div>
         </section>
+
+        <!-- Your IP adress-->
+        <section class="pt-24 -mt-4">
+            <div class="max-w-7xl mx-auto flex flex-col items-center justify-center text-center">
+                <div class="font-mono text-[9px] text-gray-600 opacity-60 tracking-[0.2em] uppercase group cursor-help transition-opacity hover:opacity-100 select-none">
+                    <span class="inline-flex items-center gap-2">
+                        <span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse shadow-[0_0_5px_#22c55e]"></span>
+                        SECURE_LINK ESTABLISHED
+                    </span>
+                    <span class="mx-2 text-gray-800">|</span>
+                    <span>CLIENT_IP: <span id="user-ip-display" class="font-bold text-gray-400 blur-[2px] transition-all duration-500 group-hover:blur-0 group-hover:text-brand-main">SCANNING...</span></span>
+                </div>
+            </div>
+
+            <script>
+                // SCRIPT: IP DETECTION (API PUBLIC)
+                (function() {
+                    const ipElement = document.getElementById('user-ip-display');
+                    if(!ipElement) return;
+
+                    // Appel à l'API ipify (Rapide, gratuit, HTTPS)
+                    fetch('https://api.ipify.org?format=json')
+                        .then(response => response.json())
+                        .then(data => {
+                            // Mise à jour de l'interface
+                            ipElement.innerText = data.ip;
+                            
+                            // Petit effet visuel "Data Decrypted" (retire le flou)
+                            setTimeout(() => {
+                                ipElement.classList.remove('blur-[2px]');
+                                ipElement.classList.remove('text-gray-400');
+                                // On utilise la classe du thème pour la couleur (Jaune/Rouge...)
+                                ipElement.classList.add('text-black'); 
+                            }, 500);
+                        })
+                        .catch(err => {
+                            // Fallback propre si bloqué par AdBlock
+                            ipElement.innerText = "MASKED_PROXY";
+                            ipElement.classList.remove('blur-[2px]');
+                            ipElement.classList.add('text-red-500');
+                        });
+                })();
+            </script>
+        </section>
     </footer>
 
     <!-- Script de logs -->
@@ -3541,6 +3903,18 @@ Date : 2025-12-21
                 cmd: 'sudo read_contracts.pdf',
                 color: 'text-white', // Blanc neutre pour l'administratif
                 status: 'ENCRYPTED'
+            },
+            'press': {
+                path: ['ROOT', 'CORPORATE', 'MEDIA_KIT'],
+                cmd: 'access_assets --public',
+                color: 'text-brand-main', // Jaune pour l'officiel
+                status: 'PUBLIC_RELATIONS'
+            },
+            'changelog': {
+                path: ['ROOT', 'SYSTEM', 'UPDATE_LOGS'],
+                cmd: 'cat changes.log --tail',
+                color: 'text-brand-main', 
+                status: 'PATCHING'
             },
             'jobs': {
                 path: ['ROOT', 'CITY', 'EMPLOYMENT_CENTER'],
