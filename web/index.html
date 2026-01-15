@@ -7397,6 +7397,11 @@ Date : 2025-12-21
             setInterval(fetchLiveCount, REFRESH_RATE);
         })();
     </script>
+    <!-- Vercel Analytics -->
+    <script type="module">
+        import { inject } from 'https://esm.sh/@vercel/analytics';
+        inject();
+    </script>
 </body>
 
 </html>
