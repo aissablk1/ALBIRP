@@ -40,8 +40,6 @@ Date : 2025-12-21
         content="Rejoignez la résistance ou faites régner l'ordre. Le meilleur serveur RP basé sur la ville d'Albi.">
     <meta name="twitter:image" content="https://albirp.com/assets/banner-og.jpg">
 
-    <meta name="twitter:image" content="https://albirp.com/assets/banner-og.jpg">
-
     <!-- Libraries (Patch 1: JSZip & FileSaver) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
@@ -351,8 +349,7 @@ Date : 2025-12-21
             }
         }
 
-        /* --- CRT EFFECT AVANCÉ (PATCH DIRECTION BAS -> HAUT) --- */
-        
+        /* --- CRT EFFECT AVANCÉ (PATCH DIRECTION BAS -> HAUT) --- */        
         /* Couche 1 : Scanlines (Texture) */
         .crt::before {
             content: " ";
@@ -364,12 +361,11 @@ Date : 2025-12-21
             right: 0;
             background: linear-gradient(to bottom,
                     rgba(18, 16, 16, 0) 50%,
-                    rgba(0, 0, 0, 0.25) 50%);
+                    rgba(0, 0, 0, 0.125) 50%);
             background-size: 100% 2px;
             z-index: 9998;
             pointer-events: none;
         }
-
         /* Couche 2 : Light Leaks, Vignetage & Rolling Bar */
         .crt::after {
             content: " ";
@@ -388,7 +384,7 @@ Date : 2025-12-21
                 /* 2. Rolling Light Leak (Barre) - Opacité boostée à 0.20 */
                 linear-gradient(to bottom,
                     rgba(255, 255, 255, 0) 0%,
-                    rgba(255, 255, 255, 0.20) 50%,
+                    rgba(255, 255, 255, 0.10) 50%,
                     rgba(255, 255, 255, 0) 100%);
             
             /* Taille : La barre fait 60% de la hauteur de vue (60vh) */
@@ -397,7 +393,6 @@ Date : 2025-12-21
             /* Animation : Flicker rapide + Scan continu de 3 secondes */
             animation: crt-flicker 0.15s infinite, crt-scan 3s linear infinite;
         }
-
         /* Animation de la barre (Mouvement Bas vers Haut CONTINU) */
         @keyframes crt-scan {
             0% {
@@ -7198,7 +7193,7 @@ Contact Presse : contact@albirp.com
                     if (loadingIndex === 0) {
                         alertIndex = (alertIndex + 1) % activeMessages.length;
                     }
-                }, 166);
+                }, 250); // 250ms = 4 FPS (Vitesse de rotation)
             }
 
             function stopTitleAnimation() {
@@ -7654,71 +7649,159 @@ Contact Presse : contact@albirp.com
         }
     </script>
     <!-- Cookie Consent Manager (Patch 2) -->
-    <div id="cookie-consent" class="fixed bottom-0 left-0 w-full bg-black border-t-4 border-brand-main z-[200000] p-6 transform translate-y-full transition-transform duration-500 flex flex-col md:flex-row justify-between items-center gap-6 shadow-[0_-10px_40px_rgba(0,0,0,0.8)]">
-        <div class="max-w-4xl">
-            <h3 class="text-white font-black uppercase text-xl mb-2 flex items-center gap-2">
-                <i class="ri-cookie-2-fill text-brand-main"></i> PROTOCOLE DE TRAÇAGE
-            </h3>
-            <p class="font-mono text-xs text-gray-300 text-justify leading-relaxed">
-                Nous utilisons des cookies (fichiers témoins) pour assurer le bon fonctionnement du terminal (Session ID, Panier) et mesurer l'audience via <span class="text-white font-bold">Vercel Analytics</span>.
-                Conformément à la directive ePrivacy, les traceurs non-essentiels sont bloqués par défaut.
-            </p>
-            <div class="mt-2 flex gap-4 text-[10px] font-mono text-gray-500 uppercase">
-                <span class="flex items-center gap-1"><span class="w-2 h-2 bg-green-500 rounded-full"></span> ESSENTIEL (Requis)</span>
-                <span class="flex items-center gap-1"><span class="w-2 h-2 bg-blue-500 rounded-full"></span> ANALYTICS (Optionnel)</span>
+    <div id="cookie-consent" class="fixed bottom-0 left-0 w-full bg-black border-t-4 border-brand-main z-[200000] transform translate-y-full transition-transform duration-500 shadow-[0_-10px_40px_rgba(0,0,0,0.8)]">
+        
+        <div id="cookie-main-view" class="p-6 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="max-w-4xl">
+                <h3 class="text-white font-black uppercase text-xl mb-2 flex items-center gap-2">
+                    <i class="ri-shield-keyhole-fill text-brand-main"></i> PROTOCOLE DE TRAÇAGE
+                </h3>
+                <p class="font-mono text-xs text-gray-300 text-justify leading-relaxed">
+                    Nous utilisons des traceurs pour assurer le fonctionnement du terminal (Session ID) et mesurer l'audience via <span class="text-white font-bold">Vercel Analytics</span>. 
+                    Vous pouvez configurer vos préférences ci-dessous.
+                </p>
+            </div>
+            <div class="flex flex-wrap gap-3 shrink-0 justify-center md:justify-end w-full md:w-auto">
+                <button onclick="CookieManager.denyAll()" class="px-4 py-2 border-2 border-red-500 text-red-500 font-bold hover:bg-red-500 hover:text-white transition-colors uppercase text-xs">
+                    REFUSER TOUT
+                </button>
+                <button onclick="CookieManager.toggleSettings()" class="px-4 py-2 border-2 border-white text-white font-bold hover:bg-white hover:text-black transition-colors uppercase text-xs">
+                    PERSONNALISER
+                </button>
+                <button onclick="CookieManager.acceptAll()" class="px-6 py-2 bg-brand-main text-black border-2 border-brand-main font-black hover:bg-white hover:border-white transition-colors uppercase text-xs shadow-hard">
+                    ACCEPTER TOUT
+                </button>
             </div>
         </div>
-        <div class="flex gap-4 shrink-0">
-            <button onclick="CookieManager.deny()" class="px-6 py-3 border-2 border-white text-white font-bold hover:bg-white hover:text-black transition-colors uppercase text-sm">
-                REFUSER TOUT
-            </button>
-            <button onclick="CookieManager.accept()" class="px-6 py-3 bg-brand-main text-black border-2 border-brand-main font-black hover:bg-white hover:border-white transition-colors uppercase text-sm shadow-hard">
-                ACCEPTER & ENTRER
-            </button>
+
+        <div id="cookie-settings-view" class="hidden bg-[#111] border-t-2 border-dashed border-gray-800 p-6">
+            <div class="max-w-4xl mx-auto space-y-4 font-mono text-xs">
+                
+                <h4 class="text-brand-main font-bold uppercase mb-4 border-b border-gray-700 pb-2">CONFIGURATION DES ACCÈS</h4>
+
+                <div class="flex justify-between items-center bg-black border border-gray-700 p-3 opacity-50 cursor-not-allowed">
+                    <div>
+                        <span class="text-white font-bold uppercase block">1. SYSTÈME (ESSENTIEL)</span>
+                        <span class="text-gray-500">Requis pour le fonctionnement (Panier, Auth, Session).</span>
+                    </div>
+                    <div class="text-green-500 font-bold">[ VERROUILLÉ ]</div>
+                </div>
+
+                <div onclick="CookieManager.toggleSwitch('analytics')" class="flex justify-between items-center bg-black border border-white p-3 cursor-pointer hover:bg-gray-900 transition-colors group select-none">
+                    <div>
+                        <span class="text-white font-bold uppercase block group-hover:text-brand-main transition-colors">2. TÉLÉMÉTRIE (ANALYTICS)</span>
+                        <span class="text-gray-400">Mesure d'audience anonyme pour améliorer le serveur.</span>
+                    </div>
+                    <div id="switch-analytics" class="w-12 h-6 border-2 border-white flex items-center p-1 transition-all">
+                        <div class="w-4 h-4 bg-white transition-all transform translate-x-0" id="knob-analytics"></div>
+                    </div>
+                </div>
+
+                <div class="flex justify-end gap-4 mt-6 pt-4 border-t border-gray-800">
+                    <button onclick="CookieManager.toggleSettings()" class="text-gray-500 hover:text-white underline">RETOUR</button>
+                    <button onclick="CookieManager.savePreferences()" class="px-6 py-2 bg-white text-black font-bold border-2 border-transparent hover:bg-brand-main hover:border-black transition-all uppercase text-xs">
+                        ENREGISTRER MES CHOIX
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
         const CookieManager = {
             banner: document.getElementById('cookie-consent'),
+            mainView: document.getElementById('cookie-main-view'),
+            settingsView: document.getElementById('cookie-settings-view'),
             
+            // État des préférences (Par défaut)
+            preferences: {
+                essential: true,
+                analytics: false
+            },
+
             init: function() {
-                // Vérifier si un choix a déjà été fait
-                const consent = localStorage.getItem('cookie_consent');
+                // Vérifier la sauvegarde existante
+                const saved = localStorage.getItem('albi_cookie_consent');
                 
-                if (!consent) {
-                    // Aucun choix : Afficher la bannière après un délai
+                if (saved) {
+                    this.preferences = JSON.parse(saved);
+                    // Si déjà accepté/refusé, on applique les scripts sans afficher la bannière
+                    if (this.preferences.analytics) this.loadScripts();
+                } else {
+                    // Aucun choix : Afficher la bannière
                     setTimeout(() => {
                         this.banner.classList.remove('translate-y-full');
                     }, 1000);
-                } else if (consent === 'true') {
-                    // Déjà accepté : Charger les scripts
-                    this.loadScripts();
                 }
-                // Si 'false', on ne fait rien (les scripts restent bloqués)
             },
 
-            accept: function() {
-                localStorage.setItem('cookie_consent', 'true');
-                this.close();
-                this.loadScripts();
-                showToast('SYSTÈME', 'Paramètres de confidentialité sauvegardés.');
+            // Gestion de l'affichage des paramètres
+            toggleSettings: function() {
+                this.settingsView.classList.toggle('hidden');
+                // Mise à jour visuelle du switch selon l'état actuel
+                this.updateSwitchUI();
             },
 
-            deny: function() {
-                localStorage.setItem('cookie_consent', 'false');
-                this.close();
-                showToast('SYSTÈME', 'Traceurs bloqués. Mode strict activé.', 'error');
+            // Gestion du switch visuel (ON/OFF)
+            toggleSwitch: function(category) {
+                this.preferences[category] = !this.preferences[category];
+                this.updateSwitchUI();
             },
 
-            close: function() {
+            updateSwitchUI: function() {
+                const container = document.getElementById('switch-analytics');
+                const knob = document.getElementById('knob-analytics');
+                
+                if (this.preferences.analytics) {
+                    container.classList.replace('border-white', 'border-brand-main');
+                    container.classList.replace('bg-transparent', 'bg-black');
+                    knob.classList.replace('bg-white', 'bg-brand-main');
+                    knob.style.transform = 'translateX(100%)';
+                } else {
+                    container.classList.replace('border-brand-main', 'border-white');
+                    knob.classList.replace('bg-brand-main', 'bg-white');
+                    knob.style.transform = 'translateX(0)';
+                }
+            },
+
+            // Action: Tout Accepter
+            acceptAll: function() {
+                this.preferences.analytics = true;
+                this.saveAndClose("Accès complet autorisé.");
+            },
+
+            // Action: Tout Refuser
+            denyAll: function() {
+                this.preferences.analytics = false;
+                this.saveAndClose("Mode strict activé. Traceurs bloqués.", 'error');
+            },
+
+            // Action: Enregistrer choix personnalisé
+            savePreferences: function() {
+                this.saveAndClose("Préférences sauvegardées.");
+            },
+
+            // Logique de sauvegarde et fermeture
+            saveAndClose: function(msg, type = 'success') {
+                localStorage.setItem('albi_cookie_consent', JSON.stringify(this.preferences));
+                
+                // Fermeture UI
                 this.banner.classList.add('translate-y-full');
+                
+                // Feedback
+                showToast('SYSTÈME', msg, type);
+
+                // Chargement conditionnel des scripts
+                if (this.preferences.analytics) {
+                    this.loadScripts();
+                } else {
+                    console.log("🍪 [COOKIES] Analytics bloqués par l'utilisateur.");
+                }
             },
 
             loadScripts: function() {
                 console.log("🍪 [COOKIES] Chargement des scripts Analytics...");
-                // Injection dynamique de Vercel Analytics (ou Google Analytics)
-                // Cela garantit qu'ils ne se chargent QUE si l'utilisateur a dit OUI.
+                // Injection dynamique Vercel Analytics
                 import('https://esm.sh/@vercel/analytics').then(mod => mod.inject());
             }
         };
