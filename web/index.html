@@ -1294,6 +1294,27 @@ Date : 2025-12-21
         .balance-update {
             animation: pulse-green 0.5s ease-out;
         }
+
+        /* --- OPTIMISATION MOBILE (CURSOR) --- */
+        @media (hover: none) and (pointer: coarse) {
+            /* 1. Réactiver le comportement tactile natif (évite les bugs de scroll/click) */
+            html, body, *, *::before, *::after {
+                cursor: auto !important;
+            }
+
+            /* 2. Cacher le curseur custom par défaut (Opacité 0) */
+            #custom-cursor {
+                opacity: 0 !important;
+                transition: opacity 0.15s ease, transform 0.1s ease;
+                will-change: opacity, transform;
+            }
+
+            /* 3. L'afficher UNIQUEMENT quand on touche l'écran (classe ajoutée via JS) */
+            #custom-cursor.mobile-active {
+                opacity: 1 !important;
+                transform: translate(-50%, -50%) scale(1.2) !important; /* Effet de focus */
+            }
+        }
     </style>
 
     <!-- Schema.org JSON-LD pour SEO IA -->
@@ -1763,6 +1784,36 @@ Date : 2025-12-21
                     coordY.innerText = `Y: ${e.pageY.toFixed(0).padStart(4, '0')}`;
                 }
             }, { passive: true });
+
+            // --- GESTION TACTILE MOBILE (Mobile Tap Feedback) ---
+            document.addEventListener('touchstart', function(e) {
+                if (cursor) {
+                    const touch = e.touches[0];
+                    // Téléportation immédiate à la position du doigt
+                    cursor.style.left = touch.clientX + 'px';
+                    cursor.style.top = touch.clientY + 'px';
+                    // Affichage
+                    cursor.classList.add('mobile-active');
+                }
+            }, { passive: true });
+
+            document.addEventListener('touchmove', function(e) {
+                if (cursor && cursor.classList.contains('mobile-active')) {
+                    const touch = e.touches[0];
+                    // Suivi du doigt
+                    cursor.style.left = touch.clientX + 'px';
+                    cursor.style.top = touch.clientY + 'px';
+                }
+            }, { passive: true });
+
+            document.addEventListener('touchend', function() {
+                if (cursor) {
+                    // Disparition douce au relâchement
+                    setTimeout(() => {
+                        cursor.classList.remove('mobile-active');
+                    }, 150);
+                }
+            });
 
             // Gestion des erreurs globales
             window.addEventListener('error', function (e) {
@@ -2296,8 +2347,7 @@ Date : 2025-12-21
                             <h3 class="text-4xl font-medieval mb-4 pl-8">Le Mur de Briques</h3>
                             <p class="text-lg bg-white p-4 border-2 border-black shadow-hard">
                                 Albi s'est isolée. Les ponts sur le Tarn sont devenus des checkpoints contrôlés par
-                                des
-                                factions rivales. Le "Vieux Pont" est désormais une zone neutre de marché noir.
+                                des factions rivales. Le "Vieux Pont" est désormais une zone neutre de marché noir.
                             </p>
                         </div>
 
@@ -2305,9 +2355,8 @@ Date : 2025-12-21
                             <span class="absolute -left-12 bg-brand-sec text-white px-2 font-mono">2025</span>
                             <h3 class="text-4xl font-medieval mb-4 pl-8">L'Isolation</h3>
                             <p class="text-lg bg-white p-4 border-2 border-black shadow-hard">
-                                Albi est devenue une ville-état. Les ponts sur le Tarn sont devenus des checkpoints
-                                contrôlés par des factions rivales. Le "Vieux Pont" est désormais une zone neutre de
-                                marché noir.
+                                Le rationnement est total. Les ressources extérieures sont bloquées et l'économie officielle s'est effondrée. 
+                                Les gangs ont remplacé l'État dans les quartiers périphériques, instaurant la loi du plus fort pour survivre.
                             </p>
                         </div>
 
@@ -2316,8 +2365,7 @@ Date : 2025-12-21
                             <h3 class="text-4xl font-medieval mb-4 pl-8">La Révolution</h3>
                             <p class="text-lg bg-white p-4 border-2 border-black shadow-hard">
                                 Prenez les commandes d'Albi. En tant que maire, vos décisions façonnent le destin de
-                                la
-                                cité épiscopale. Chaque choix compte, chaque alliance forge l'avenir.
+                                la cité épiscopale. Chaque choix compte, chaque alliance forge l'avenir.
                             </p>
                         </div>
                     </div>
