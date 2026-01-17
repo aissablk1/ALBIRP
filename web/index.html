@@ -96,7 +96,7 @@ Date : 2025-12-21
                         'brand-text': 'var(--color-text)',
 
                         // Palette Statique
-                        'albi-red': '#E63946',
+                        'ALBI-red': '#E63946',
                         'neo-yellow': '#D6FF00',
                         'neo-pink': '#FF00F5',
                         'neo-blue': '#00E0FF',
@@ -148,7 +148,7 @@ Date : 2025-12-21
         }
 
         /* État Secondaire : ALBI HISTORIQUE (appliqué via JS) */
-        body.theme-albi {
+        body.theme-ALBI {
             --color-main: #E63946;
             /* rougeAlbi */
             --color-sec: #FF9F1C;
@@ -678,32 +678,32 @@ Date : 2025-12-21
         }
 
         /* Thème ALBI (fond anthracite #1F2937) */
-        body.theme-albi .footer-contrast {
+        body.theme-ALBI .footer-contrast {
             color: #FFFFFF;
             /* Blanc sur fond anthracite = excellent contraste */
         }
 
-        body.theme-albi .footer-title {
+        body.theme-ALBI .footer-title {
             color: #E63946;
             /* Rouge Albi sur fond anthracite = bon contraste */
         }
 
-        body.theme-albi .footer-text {
+        body.theme-ALBI .footer-text {
             color: #FFFFFF;
             /* Blanc sur fond anthracite = excellent contraste */
         }
 
-        body.theme-albi .footer-link {
+        body.theme-ALBI .footer-link {
             color: #FFFFFF;
             /* Blanc sur fond anthracite = excellent contraste */
         }
 
-        body.theme-albi .footer-link:hover {
+        body.theme-ALBI .footer-link:hover {
             color: #E63946;
             /* Rouge Albi au survol */
         }
 
-        body.theme-albi .footer-copyright {
+        body.theme-ALBI .footer-copyright {
             color: #FFFFFF;
             /* Blanc sur fond anthracite = excellent contraste */
         }
@@ -842,10 +842,10 @@ Date : 2025-12-21
                 color: #000000 !important;
             }
 
-            body.theme-albi .footer-contrast,
-            body.theme-albi .footer-text,
-            body.theme-albi .footer-link,
-            body.theme-albi .footer-copyright,
+            body.theme-ALBI .footer-contrast,
+            body.theme-ALBI .footer-text,
+            body.theme-ALBI .footer-link,
+            body.theme-ALBI .footer-copyright,
             body.theme-data .footer-contrast,
             body.theme-data .footer-text,
             body.theme-data .footer-link,
@@ -990,7 +990,7 @@ Date : 2025-12-21
             position: fixed;
             inset: 0;
             background-color: #000;
-            z-index: 99999;
+            z-index: 100000;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -1025,7 +1025,7 @@ Date : 2025-12-21
 
         /* --- PATCH : VISIBILITÉ DU CURSEUR (FORCE Z-INDEX) --- */
         #custom-cursor {
-            /* 999999 = Au-dessus du Preloader (99999) 
+            /* 999999 = Au-dessus du Preloader (100000) 
                             ET au-dessus du Resolution Lockdown (200000) 
                             !important = Priorité absolue sur Tailwind 
                             */
@@ -1053,7 +1053,7 @@ Date : 2025-12-21
             background-color: #FF0000;
             /* Rouge Fatal */
             z-index: 200000;
-            /* Au-dessus de TOUT (Preloader = 99999) */
+            /* Au-dessus de TOUT (Preloader = 100000) */
             flex-direction: column;
             align-items: center;
             justify-content: center;
@@ -1227,8 +1227,8 @@ Date : 2025-12-21
         }
 
         /* ============================================
-                        PACK ULTIMATE V3.0 - STYLES IMMERSIFS
-                        ============================================ */
+            PACK ULTIMATE V3.0 - STYLES IMMERSIFS
+        ============================================ */
 
         /* --- TOOLTIP SYSTÈME V2 (OPTIMISÉ GPU) --- */
         #cursor-tooltip {
@@ -1420,6 +1420,32 @@ Date : 2025-12-21
                 <span id="current-res">READING...</span>
             </div>
         </div>
+
+        <!-- SYSTÈME DE MONITORING RÉSOLUTION -->
+        <script>
+            // --- SYSTÈME DE MONITORING RÉSOLUTION ---
+            const resDisplay = document.getElementById('current-res');
+
+            function updateResMonitor() {
+                if (resDisplay) {
+                    const w = window.innerWidth;
+                    const h = window.innerHeight;
+                    resDisplay.innerText = `CURRENT: ${w}x${h}`;
+
+                    // Change la couleur si critique
+                    if (w < 375 || h < 500) {
+                        resDisplay.style.color = 'red';
+                        resDisplay.style.fontWeight = 'bold';
+                    } else {
+                        resDisplay.style.color = 'green';
+                    }
+                }
+            }
+
+            window.addEventListener('resize', updateResMonitor);
+            // Init
+            updateResMonitor();
+        </script>
     </div>
 
     <!-- OVERLAY QR CODE FULLSCREEN -->
@@ -1437,52 +1463,52 @@ Date : 2025-12-21
                 TAP TO CLOSE X
             </p>
         </div>
-    </div>
-    
-    <!-- GÉNÉRATEUR QR CODE D'URGENCE -->
-    <script>
-        // --- GÉNÉRATEUR QR CODE D'URGENCE ---
-        (function initEmergencyQR() {
-            const qrImg = document.getElementById('rescue-qr');
-            if (qrImg) {
-                // Utilisation de l'API publique goqr.me ou qrserver pour générer le QR sans librairie lourde
-                // On encode l'URL actuelle du site
-                const currentUrl = encodeURIComponent(window.location.href);
-                qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&margin=0&data=${currentUrl}`;
-            }
-        })();
 
-        // --- GESTION DU ZOOM QR CODE ---
-        function toggleQRFullscreen(show) {
-            const overlay = document.getElementById('qr-overlay');
-            const smallQr = document.getElementById('rescue-qr');
-            const bigQr = document.getElementById('qr-fullscreen-img');
-
-            if (show) {
-                // 1. Copier la source du petit QR vers le grand
-                if (smallQr && bigQr) {
-                    bigQr.src = smallQr.src;
+        <!-- GÉNÉRATEUR QR CODE D'URGENCE -->
+        <script>
+            // --- GÉNÉRATEUR QR CODE D'URGENCE ---
+            (function initEmergencyQR() {
+                const qrImg = document.getElementById('rescue-qr');
+                if (qrImg) {
+                    // Utilisation de l'API publique goqr.me ou qrserver pour générer le QR sans librairie lourde
+                    // On encode l'URL actuelle du site
+                    const currentUrl = encodeURIComponent(window.location.href);
+                    qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&margin=0&data=${currentUrl}`;
                 }
-                // 2. Afficher l'overlay
-                overlay.classList.remove('hidden');
-                overlay.classList.add('flex');
-            } else {
-                // 3. Cacher l'overlay
-                overlay.classList.add('hidden');
-                overlay.classList.remove('flex');
-            }
-        }
+            })();
 
-        // Fermer l'overlay au clic
-        document.addEventListener('DOMContentLoaded', () => {
-            const overlay = document.getElementById('qr-overlay');
-            if (overlay) {
-                overlay.addEventListener('click', () => {
-                    toggleQRFullscreen(false);
-                });
+            // --- GESTION DU ZOOM QR CODE ---
+            function toggleQRFullscreen(show) {
+                const overlay = document.getElementById('qr-overlay');
+                const smallQr = document.getElementById('rescue-qr');
+                const bigQr = document.getElementById('qr-fullscreen-img');
+
+                if (show) {
+                    // 1. Copier la source du petit QR vers le grand
+                    if (smallQr && bigQr) {
+                        bigQr.src = smallQr.src;
+                    }
+                    // 2. Afficher l'overlay
+                    overlay.classList.remove('hidden');
+                    overlay.classList.add('flex');
+                } else {
+                    // 3. Cacher l'overlay
+                    overlay.classList.add('hidden');
+                    overlay.classList.remove('flex');
+                }
             }
-        });
-    </script>
+
+            // Fermer l'overlay au clic
+            document.addEventListener('DOMContentLoaded', () => {
+                const overlay = document.getElementById('qr-overlay');
+                if (overlay) {
+                    overlay.addEventListener('click', () => {
+                        toggleQRFullscreen(false);
+                    });
+                }
+            });
+        </script>
+    </div>
 
     <!-- Preloader BIOS -->
     <div id="preloader">
@@ -1526,6 +1552,147 @@ Date : 2025-12-21
                     }, 50);
                 }
             })();
+        </script>
+        <script>
+            // --- ISOLATED PRELOADER ---
+            (function () {
+                const preloader = document.getElementById('preloader');
+                const loaderBar = document.getElementById('loader-bar');
+                const loaderText = document.getElementById('loader-text');
+
+                if (!preloader) return;
+
+                // Configuration
+                const minTime = 1500; // Temps mini pour l'animation
+                const maxTime = 8000; // Temps maxi (Sécurité)
+                const start = Date.now();
+                let dismissed = false;
+
+                // Animation visuelle fake
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += Math.random() * 10;
+                    if (progress > 95) progress = 95; // On attend la fin réelle pour le 100%
+
+                    if (loaderBar) loaderBar.style.width = `${progress}%`;
+                }, 100);
+
+                // Fonction de fermeture
+                function dismiss() {
+                    if (dismissed) return;
+                    dismissed = true;
+                    clearInterval(interval);
+
+                    const elapsed = Date.now() - start;
+                    const remaining = Math.max(0, minTime - elapsed);
+
+                    setTimeout(() => {
+                        // 100% Visuel
+                        if (loaderBar) loaderBar.style.width = '100%';
+                        if (loaderText) loaderText.innerText = "SYSTEM READY.";
+
+                        // Disparition
+                        preloader.style.transition = "opacity 0.6s ease, transform 0.6s ease";
+                        preloader.style.opacity = "0";
+                        preloader.style.pointerEvents = "none";
+
+                        // Suppression du DOM
+                        setTimeout(() => preloader.style.display = "none", 600);
+                    }, remaining);
+                }
+
+                // Déclencheurs
+                window.addEventListener('load', dismiss);       // Normal
+                setTimeout(dismiss, maxTime);                   // Secours
+            })();
+        </script>
+        <script>
+            // --- CONFIGURATION DE VOS LIENS (REMPLISSEZ ICI) ---
+            const ALBI_LINKS = {
+                // Le lien principal de votre jeu Roblox
+                roblox_game: "https://www.roblox.com/games/123456789/ALBI-RP-FRANCE-WHITELIST",
+
+                // Vos réseaux
+                discord: "https://discord.gg/eVn8pKYwQy",
+                twitter: "https://twitter.com/AlbiRP_Officiel",
+                instagram: "https://instagram.com/albirp_roblox",
+                tiktok: "https://tiktok.com/@albirp_fr",
+
+                // Sites de vote
+                vote_top_serveurs: "https://top-serveurs.net/roblox/vote/ALBI-rp",
+                vote_tracky: "https://trackyserver.com/server/ALBI-rp",
+
+                // Contact
+                email: "contact@albirp.com"
+            };
+
+            document.addEventListener('DOMContentLoaded', () => {
+                console.log("🔗 LINK MANAGER: Hydratation des liens en cours...");
+
+                // 1. BOUTONS "JOUER" (Navbar & Hero)
+                // On cible tous les boutons qui contiennent le texte "JOUER" ou l'icône manette
+                const playButtons = document.querySelectorAll('button[data-tooltip*="Jouer"], button[onclick*="roblox"]');
+                playButtons.forEach(btn => {
+                    // On remplace le comportement par défaut
+                    btn.onclick = function (e) {
+                        e.preventDefault();
+                        window.open(ALBI_LINKS.roblox_game, '_blank');
+                    };
+                    // Met à jour le tooltip
+                    btn.setAttribute('data-tooltip', 'Ouvrir Roblox (PC/Mobile)');
+                });
+
+                // 2. PAGE SOCIALS (Mise à jour intelligente par détection d'icône)
+                const socialSection = document.getElementById('view-socials');
+                if (socialSection) {
+                    // Twitter
+                    const twBtn = socialSection.querySelector('.ri-twitter-x-fill')?.closest('a');
+                    if (twBtn) twBtn.href = ALBI_LINKS.twitter;
+
+                    // Instagram
+                    const instaBtn = socialSection.querySelector('.ri-instagram-fill')?.closest('a');
+                    if (instaBtn) instaBtn.href = ALBI_LINKS.instagram;
+
+                    // TikTok
+                    const tiktokBtn = socialSection.querySelector('.ri-tiktok-fill')?.closest('a');
+                    if (tiktokBtn) tiktokBtn.href = ALBI_LINKS.tiktok;
+
+                    // Discord (Gros bloc)
+                    const discordBtn = socialSection.querySelector('.ri-discord-fill')?.closest('a');
+                    if (discordBtn) discordBtn.href = ALBI_LINKS.discord;
+
+                    // Roblox (Gros bloc)
+                    // On cherche le lien qui contient le SVG Roblox ou le texte "SERVEUR ROBLOX"
+                    const rblxLinks = socialSection.querySelectorAll('a');
+                    rblxLinks.forEach(link => {
+                        if (link.innerHTML.includes('SERVEUR ROBLOX') || link.innerHTML.includes('CONNECT')) {
+                            link.href = ALBI_LINKS.roblox_game;
+                        }
+                    });
+
+                    // Mail
+                    const mailBtn = socialSection.querySelector('.ri-mail-send-fill')?.closest('a');
+                    if (mailBtn) mailBtn.href = `mailto:${ALBI_LINKS.email}`;
+                }
+
+                // 3. PAGE VOTE (Redirection dynamique)
+                // On écrase la fonction handleVote pour utiliser nos liens de config
+                window.handleVote = function (target) {
+                    let finalUrl = target; // Par défaut
+
+                    // Si l'argument est un mot-clé, on utilise la config
+                    if (target.includes('top-serveurs')) finalUrl = ALBI_LINKS.vote_top_serveurs;
+                    if (target.includes('tracky')) finalUrl = ALBI_LINKS.vote_tracky;
+                    if (target.includes('discord')) finalUrl = ALBI_LINKS.discord;
+
+                    toastManager.show("REDIRECTION...", "Ouverture de la page de vote.");
+                    setTimeout(() => {
+                        window.open(finalUrl, '_blank');
+                    }, 800);
+                };
+
+                console.log("✅ LINK MANAGER: Liens mis à jour avec succès.");
+            });
         </script>
     </div>
 
@@ -1842,9 +2009,7 @@ Date : 2025-12-21
         class="top-40 mt-20 border-b-4 border-black bg-brand-sec py-3 mb-10 overflow-hidden -rotate-1 w-[105%] -ml-2 z-40 relative transition-colors duration-300">
         <div id="infinite-marquee" class="flex whitespace-nowrap overflow-hidden">
             <div class="marquee-item font-bold text-xl uppercase tracking-widest px-4">
-                // BIENVENUE À ALBI // VILLE COMPLÈTE // RP STRICT // ÉCONOMIE RÉALISTE // REJOIGNEZ LA RÉSISTANCE
-                //
-                #FROMTHETARN // LIBERTÉ
+                // BIENVENUE À ALBI // VILLE COMPLÈTE // RP STRICT // ÉCONOMIE RÉALISTE // REJOIGNEZ LA RÉSISTANCE // #FROMTHETARN // LIBERTÉ
             </div>
         </div>
     </div>
@@ -1977,84 +2142,114 @@ Date : 2025-12-21
                         </button>
                     </div>
 
-                    <div class="mt-6 flex flex-col items-center justify-center">
+                    <div class="mt-6 flex flex-col items-center justify-center gap-8">
+
                         <!-- Social Proof (CRO - Animated) -->
-                        <div class="mt-6 flex items-center justify-center gap-2 font-mono text-sm font-bold opacity-0 animate-[fadeIn_0.5s_ease-out_0.8s_forwards]">
-                            <span class="text-green-600 animate-pulse text-xs">●</span>
-                            <span class="tracking-tight">
-                                +<span id="player-counter" data-target="1250">0</span> JOUEURS INSCRITS
-                            </span>
-                        </div>
-                        <div class="mt-3 flex items-center justify-center gap-4 opacity-0 animate-[fadeIn_0.5s_ease-out_1.2s_forwards]">
-                            
-                            <div class="flex -space-x-4">
-                                <div class="w-10 h-10 rounded-full border-2 border-black bg-brand-main z-30 overflow-hidden shadow-sm">
-                                    <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Felix" alt="Joueur" class="w-full h-full object-cover">
+                        <div class="flex flex-row xs:flex-col items-center justify-center gap-6 opacity-0 animate-[fadeIn_0.5s_ease-out_0.8s_forwards]">
+                            <!-- Number of players -->
+                            <div class="flex items-center justify-center gap-2 font-mono text-sm font-bold opacity-0 animate-[fadeIn_0.5s_ease-out_0.8s_forwards]">
+                                <span class="text-green-600 animate-pulse text-xs">●</span>
+                                <span class="tracking-tight">
+                                    +<span id="player-counter" data-target="1250">0</span> <span id="city-status-label">JOUEURS DÉJÀ EN VILLE</span>
+                                </span>
+                            </div>
+
+                            <!-- Testimonials -->
+                            <div class="mt-3 flex items-center justify-center gap-4 opacity-0 animate-[fadeIn_0.5s_ease-out_1.2s_forwards]">
+                                <!-- Icones of players -->
+                                <div class="flex -space-x-4">
+                                    <div class="w-10 h-10 rounded-full border-2 border-black bg-brand-main z-30 overflow-hidden shadow-sm">
+                                        <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Felix" alt="Joueur" class="w-full h-full object-cover">
+                                    </div>
+                                    <div class="w-10 h-10 rounded-full border-2 border-black bg-white z-20 overflow-hidden shadow-sm">
+                                        <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Aneka" alt="Joueur" class="w-full h-full object-cover">
+                                    </div>
+                                    <div class="w-10 h-10 rounded-full border-2 border-black bg-brand-sec z-10 overflow-hidden shadow-sm flex items-center justify-center">
+                                        <span class="pl-3 text-[10px] text-black">+99</span>
+                                    </div>
                                 </div>
-                                <div class="w-10 h-10 rounded-full border-2 border-black bg-white z-20 overflow-hidden shadow-sm">
-                                    <img src="https://api.dicebear.com/9.x/avataaars/svg?seed=Aneka" alt="Joueur" class="w-full h-full object-cover">
-                                </div>
-                                <div class="w-10 h-10 rounded-full border-2 border-black bg-brand-sec z-10 overflow-hidden shadow-sm flex items-center justify-center">
-                                    <span class="pl-3 text-[10px] text-black">+99</span>
+                                
+                                <!-- Rating -->
+                                <div class="text-left">
+                                    <div class="flex text-yellow-400 text-xs mb-0.5" style="text-shadow: 1px 1px 0 #000;">
+                                        <i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i>
+                                    </div>
+                                    <p class="font-mono text-[10px] font-bold uppercase text-gray-500 leading-none tracking-wider">
+                                        NOTÉ 4.9/5 SUR DISCORD
+                                    </p>
                                 </div>
                             </div>
-                            
-                            <div class="text-left">
-                                <div class="flex text-yellow-400 text-xs mb-0.5" style="text-shadow: 1px 1px 0 #000;">
-                                    <i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i>
-                                </div>
-                                <p class="font-mono text-[10px] font-bold uppercase text-gray-500 leading-none tracking-wider">
-                                    NOTÉ 4.9/5 SUR DISCORD
-                                </p>
-                            </div>
-                        </div>
-                        <script>
-                            // Animation Compteur (High Performance)
-                            (function() {
-                                const counter = document.getElementById('player-counter');
-                                if (!counter) return;
-
-                                const target = parseInt(counter.getAttribute('data-target'));
-                                const duration = 2000; // Durée en ms
-
-                                const animateCounter = () => {
-                                    const start = performance.now();
-                                    
-                                    const step = (currentTime) => {
-                                        const elapsed = currentTime - start;
-                                        const progress = Math.min(elapsed / duration, 1);
+                            <script>
+                                // Animation Compteur (High Performance) & Dynamic Text
+                                (function() {
+                                    // 1. Dynamic Text Logic (RWD)
+                                    const updateCityLabel = () => {
+                                        const label = document.getElementById('city-status-label');
+                                        if(!label) return;
                                         
-                                        // Easing : easeOutExpo (Effet freinage rapide à la fin)
-                                        const ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+                                        const width = window.innerWidth;
+                                        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent);
                                         
-                                        const current = Math.floor(ease * target);
-                                        // Formatage "1,250" (US locale pour la virgule)
-                                        counter.innerText = current.toLocaleString('en-US');
-
-                                        if (progress < 1) {
-                                            requestAnimationFrame(step);
+                                        if (width < 640) {
+                                            label.innerText = "CITOYENS"; // Shortest for mobile
+                                        } else if (width < 1024) {
+                                            label.innerText = "JOUEURS ACTIFS"; // Mid-size
                                         } else {
-                                            counter.innerText = "1,250"; // Valeur finale propre
+                                            label.innerText = "JOUEURS DÉJÀ EN VILLE"; // Desktop default
                                         }
                                     };
-                                    requestAnimationFrame(step);
-                                };
+                                    
+                                    // Run on load and resize
+                                    updateCityLabel();
+                                    window.addEventListener('resize', updateCityLabel);
 
-                                // Déclencheur (Uniquement quand l'élément est visible)
-                                const observer = new IntersectionObserver((entries) => {
-                                    if (entries[0].isIntersecting) {
-                                        setTimeout(animateCounter, 300); // Petit délai pour laisser l'oeil arriver
-                                        observer.disconnect();
-                                    }
-                                });
-                                observer.observe(counter);
-                            })();
-                        </script>
+
+                                    // 2. Counter Animation
+                                    const counter = document.getElementById('player-counter');
+                                    if (!counter) return;
+
+                                    const target = parseInt(counter.getAttribute('data-target'));
+                                    const duration = 2000; // Durée en ms
+
+                                    const animateCounter = () => {
+                                        const start = performance.now();
+                                        
+                                        const step = (currentTime) => {
+                                            const elapsed = currentTime - start;
+                                            const progress = Math.min(elapsed / duration, 1);
+                                            
+                                            // Easing : easeOutExpo (Effet freinage rapide à la fin)
+                                            const ease = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+                                            
+                                            const current = Math.floor(ease * target);
+                                            // Formatage "1,250" (US locale pour la virgule)
+                                            counter.innerText = current.toLocaleString('en-US');
+
+                                            if (progress < 1) {
+                                                requestAnimationFrame(step);
+                                            } else {
+                                                counter.innerText = "1,250"; // Valeur finale propre
+                                            }
+                                        };
+                                        requestAnimationFrame(step);
+                                    };
+
+                                    // Déclencheur (Uniquement quand l'élément est visible)
+                                    const observer = new IntersectionObserver((entries) => {
+                                        if (entries[0].isIntersecting) {
+                                            setTimeout(animateCounter, 300); // Petit délai pour laisser l'oeil arriver
+                                            observer.disconnect();
+                                        }
+                                    });
+                                    observer.observe(counter);
+                                })();
+                            </script>
+                        </div>
 
                         <!-- Button Trailer -->
                         <div class="flex flex-col md:flex-row gap-6 items-center w-full max-w-2xl justify-center">
                             <button onclick="openTrailer()" 
-                                class="mt-4 md:mt-0 md:ml-4 text-xs font-mono font-bold uppercase tracking-widest border-b-2 border-black hover:bg-black hover:text-white transition-all cursor-pointer flex items-center gap-2 pb-1">
+                                class="mt-4 md:mt-0 md:ml-4 pt-2 text-xs font-mono font-bold uppercase tracking-widest border-b-2 border-black hover:bg-black hover:text-white transition-all cursor-pointer flex items-center gap-2 pb-1">
                                 <i class="ri-play-circle-line text-xl"></i> Voir le Trailer Officiel
                             </button>
                         </div>
@@ -2957,7 +3152,7 @@ Date : 2025-12-21
                     </div>
 
                     <div class="flex flex-col gap-6">
-                        <a href="javascript:void(0)" onclick="handleVote('https://top-serveurs.net/gta/vote/albi-rp')"
+                        <a href="javascript:void(0)" onclick="handleVote('https://top-serveurs.net/gta/vote/ALBI-rp')"
                             class="block group relative">
                             <div
                                 class="bg-black text-white border-4 border-black p-6 flex justify-between items-center transition-transform group-hover:-translate-y-2 group-hover:shadow-hard cursor-pointer">
@@ -2967,7 +3162,7 @@ Date : 2025-12-21
                             </div>
                         </a>
 
-                        <a href="javascript:void(0)" onclick="handleVote('https://trackyserver.com/server/albi-rp')"
+                        <a href="javascript:void(0)" onclick="handleVote('https://trackyserver.com/server/ALBI-rp')"
                             class="block group relative">
                             <div
                                 class="bg-brand-main text-black border-4 border-black p-6 flex justify-between items-center transition-transform group-hover:-translate-y-2 group-hover:shadow-hard cursor-pointer">
@@ -3119,19 +3314,14 @@ Date : 2025-12-21
                     <a href="https://www.youtube.com/@AlbiRP_Officiel" target="_blank"
                         class="group relative h-80 border-4 border-red-600 bg-black overflow-hidden hover:bg-red-600 transition-colors duration-300">
                         <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/diagmonds-light.png')]"></div>
-                        
                         <div class="absolute inset-0 flex flex-col justify-between p-6 z-10">
                             <div class="flex justify-between items-start">
                                 <i class="ri-youtube-fill text-5xl text-red-600 group-hover:text-white transition-colors duration-300"></i>
-                                <span class="bg-red-600 text-white px-2 font-bold text-xs font-mono py-1 group-hover:bg-white group-hover:text-red-600 transition-colors">VIDEOS</span>
+                                <span class="bg-red-600 text-white px-2 font-bold text-xs font-mono py-1 group-hover:bg-white group-hover:text-red-600 transition-colors">VIDÉOS</span>
                             </div>
                             <div>
-                                <h3 class="text-3xl font-black text-white mb-2 group-hover:text-black transition-colors duration-300">
-                                    YOUTUBE
-                                </h3>
-                                <p class="font-mono text-sm text-gray-400 group-hover:text-white/90 transition-colors duration-300">
-                                    Trailers, Devlogs & Tutos.
-                                </p>
+                                <h3 class="text-3xl font-black text-white mb-2 group-hover:text-black transition-colors duration-300">YOUTUBE</h3>
+                                <p class="font-mono text-sm text-gray-400 group-hover:text-white/90 transition-colors duration-300">Trailers & Tutos.</p>
                             </div>
                             <div class="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-4 group-hover:translate-y-0">
                                 <i class="ri-arrow-right-up-line text-4xl text-black"></i>
@@ -3141,26 +3331,17 @@ Date : 2025-12-21
 
                     <a href="#" target="_blank"
                         class="group relative h-80 border-4 border-white bg-black overflow-hidden hover:bg-white transition-colors duration-300">
-                        <div
-                            class="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/diagmonds-light.png')]">
-                        </div>
+                        <div class="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/diagmonds-light.png')]"></div>
                         <div class="absolute inset-0 flex flex-col justify-between p-6 z-10">
                             <div class="flex justify-between items-start">
-                                <i
-                                    class="ri-twitter-x-fill text-5xl text-white group-hover:text-black transition-colors duration-300"></i>
-                                <span
-                                    class="bg-white text-black px-2 font-bold text-xs font-mono py-1 group-hover:bg-black group-hover:text-white transition-colors">OFFICIAL</span>
+                                <i class="ri-twitter-x-fill text-5xl text-white group-hover:text-black transition-colors duration-300"></i>
+                                <span class="bg-white text-black px-2 font-bold text-xs font-mono py-1 group-hover:bg-black group-hover:text-white transition-colors">OFFICIAL</span>
                             </div>
                             <div>
-                                <h3
-                                    class="text-3xl font-black text-white mb-2 group-hover:text-black transition-colors duration-300">
-                                    TWITTER</h3>
-                                <p
-                                    class="font-mono text-sm text-gray-400 group-hover:text-black/80 transition-colors duration-300">
-                                    Suivez les annonces et les dramas.</p>
+                                <h3 class="text-3xl font-black text-white mb-2 group-hover:text-black transition-colors duration-300">TWITTER</h3>
+                                <p class="font-mono text-sm text-gray-400 group-hover:text-black/80 transition-colors duration-300">Annonces & Dramas.</p>
                             </div>
-                            <div
-                                class="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-4 group-hover:translate-y-0">
+                            <div class="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-4 group-hover:translate-y-0">
                                 <i class="ri-arrow-right-up-line text-4xl text-black"></i>
                             </div>
                         </div>
@@ -3168,26 +3349,17 @@ Date : 2025-12-21
 
                     <a href="#" target="_blank"
                         class="group relative h-80 border-4 border-brand-sec bg-black overflow-hidden hover:bg-brand-sec transition-colors duration-300">
-                        <div
-                            class="absolute inset-0 opacity-20 bg-[radial-gradient(circle,white,transparent_20%)] [background-size:20px_20px]">
-                        </div>
+                        <div class="absolute inset-0 opacity-20 bg-[radial-gradient(circle,white,transparent_20%)] [background-size:20px_20px]"></div>
                         <div class="absolute inset-0 flex flex-col justify-between p-6 z-10">
                             <div class="flex justify-between items-start">
-                                <i
-                                    class="ri-instagram-fill text-5xl text-brand-sec group-hover:text-white transition-colors duration-300"></i>
-                                <span
-                                    class="bg-brand-sec text-white px-2 font-bold text-xs font-mono py-1 group-hover:bg-white group-hover:text-brand-sec transition-colors">GALLERY</span>
+                                <i class="ri-instagram-fill text-5xl text-brand-sec group-hover:text-white transition-colors duration-300"></i>
+                                <span class="bg-brand-sec text-white px-2 font-bold text-xs font-mono py-1 group-hover:bg-white group-hover:text-brand-sec transition-colors">GALLERY</span>
                             </div>
                             <div>
-                                <h3 class="text-3xl font-black text-white mb-2 transition-colors duration-300">
-                                    INSTAGRAM
-                                </h3>
-                                <p
-                                    class="font-mono text-sm text-gray-400 group-hover:text-white/90 transition-colors duration-300">
-                                    Les plus beaux clichés de la ville.</p>
+                                <h3 class="text-3xl font-black text-white mb-2 transition-colors duration-300">INSTAGRAM</h3>
+                                <p class="font-mono text-sm text-gray-400 group-hover:text-white/90 transition-colors duration-300">Les plus beaux clichés.</p>
                             </div>
-                            <div
-                                class="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-4 group-hover:translate-y-0">
+                            <div class="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-4 group-hover:translate-y-0">
                                 <i class="ri-arrow-right-up-line text-4xl text-white"></i>
                             </div>
                         </div>
@@ -3195,100 +3367,65 @@ Date : 2025-12-21
 
                     <a href="#" target="_blank"
                         class="group relative h-80 border-4 border-brand-main bg-black overflow-hidden hover:bg-brand-main transition-colors duration-300">
-                        <div class="absolute inset-0 opacity-10"
-                            style="background: repeating-linear-gradient(0deg, transparent, transparent 2px, #fff 2px, #fff 4px);">
-                        </div>
+                        <div class="absolute inset-0 opacity-10" style="background: repeating-linear-gradient(0deg, transparent, transparent 2px, #fff 2px, #fff 4px);"></div>
                         <div class="absolute inset-0 flex flex-col justify-between p-6 z-10">
                             <div class="flex justify-between items-start">
-                                <i
-                                    class="ri-tiktok-fill text-5xl text-brand-main group-hover:text-black transition-colors duration-300"></i>
-                                <span
-                                    class="bg-brand-main text-black px-2 font-bold text-xs font-mono py-1 group-hover:bg-black group-hover:text-brand-main transition-colors">CLIPS</span>
+                                <i class="ri-tiktok-fill text-5xl text-brand-main group-hover:text-black transition-colors duration-300"></i>
+                                <span class="bg-brand-main text-black px-2 font-bold text-xs font-mono py-1 group-hover:bg-black group-hover:text-brand-main transition-colors">CLIPS</span>
                             </div>
                             <div>
-                                <h3
-                                    class="text-3xl font-black text-white mb-2 group-hover:text-black transition-colors duration-300">
-                                    TIKTOK</h3>
-                                <p
-                                    class="font-mono text-sm text-gray-400 group-hover:text-black/80 transition-colors duration-300">
-                                    Best-of, fails et edits.</p>
+                                <h3 class="text-3xl font-black text-white mb-2 group-hover:text-black transition-colors duration-300">TIKTOK</h3>
+                                <p class="font-mono text-sm text-gray-400 group-hover:text-black/80 transition-colors duration-300">Best-of & Fails.</p>
                             </div>
-                            <div
-                                class="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-4 group-hover:translate-y-0">
+                            <div class="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-4 group-hover:translate-y-0">
                                 <i class="ri-arrow-right-up-line text-4xl text-black"></i>
                             </div>
                         </div>
                     </a>
 
                     <a href="https://discord.gg/eVn8pKYwQy" target="_blank"
-                        class="md:col-span-3 group relative h-64 md:h-72 border-4 border-[#5865F2] bg-black overflow-hidden hover:bg-[#5865F2] transition-colors duration-300">
-                        <div
-                            class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]">
-                        </div>
-                        <div
-                            class="absolute inset-0 flex flex-col md:flex-row items-center justify-between p-8 md:p-12 z-10">
+                        class="md:col-span-2 xl:col-span-4 group relative h-64 md:h-72 border-4 border-[#5865F2] bg-black overflow-hidden hover:bg-[#5865F2] transition-colors duration-300">
+                        <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+                        <div class="absolute inset-0 flex flex-col md:flex-row items-center justify-between p-8 md:p-12 z-10">
                             <div class="flex items-center gap-6 mb-6 md:mb-0">
-                                <i
-                                    class="ri-discord-fill text-7xl md:text-8xl text-[#5865F2] group-hover:text-white transition-colors duration-300"></i>
+                                <i class="ri-discord-fill text-7xl md:text-8xl text-[#5865F2] group-hover:text-white transition-colors duration-300"></i>
                                 <div>
                                     <div class="flex items-center gap-3 mb-2">
-                                        <h3 class="text-4xl md:text-5xl font-black text-white uppercase italic">
-                                            DISCORD
-                                        </h3>
-                                        <span
-                                            class="bg-[#5865F2] text-white px-3 py-1 font-bold text-xs font-mono group-hover:bg-white group-hover:text-[#5865F2] transition-colors">MAIN
-                                            HUB</span>
+                                        <h3 class="text-4xl md:text-5xl font-black text-white uppercase italic">DISCORD</h3>
+                                        <span class="bg-[#5865F2] text-white px-3 py-1 font-bold text-xs font-mono group-hover:bg-white group-hover:text-[#5865F2] transition-colors">MAIN HUB</span>
                                     </div>
-                                    <p
-                                        class="font-mono text-sm md:text-lg text-gray-400 group-hover:text-white/90 max-w-xl">
-                                        Rejoignez <span class="text-white font-bold group-hover:underline">15,000+
-                                            membres</span>. Whitelist, tickets support & vocal.
+                                    <p class="font-mono text-sm md:text-lg text-gray-400 group-hover:text-white/90 max-w-xl">
+                                        Rejoignez <span class="text-white font-bold group-hover:underline">15,000+ membres</span>. Whitelist, tickets support & vocal.
                                     </p>
                                 </div>
                             </div>
                             <div class="flex items-center">
-                                <span
-                                    class="hidden md:flex items-center justify-center w-16 h-16 border-4 border-[#5865F2] rounded-full group-hover:border-white group-hover:bg-white group-hover:text-[#5865F2] transition-all duration-300">
-                                    <i
-                                        class="ri-arrow-right-up-line text-3xl text-white group-hover:text-[#5865F2]"></i>
+                                <span class="hidden md:flex items-center justify-center w-16 h-16 border-4 border-[#5865F2] rounded-full group-hover:border-white group-hover:bg-white group-hover:text-[#5865F2] transition-all duration-300">
+                                    <i class="ri-arrow-right-up-line text-3xl text-white group-hover:text-[#5865F2]"></i>
                                 </span>
                             </div>
                         </div>
                     </a>
 
                     <a href="https://www.roblox.com/games/..." target="_blank"
-                        class="md:col-span-2 group relative h-64 border-4 border-white bg-black overflow-hidden hover:bg-white transition-colors duration-300">
-                        <div class="absolute inset-0 opacity-10"
-                            style="background-image: radial-gradient(white 1px, transparent 1px); background-size: 20px 20px;">
-                        </div>
-
+                        class="md:col-span-1 xl:col-span-3 group relative h-64 border-4 border-white bg-black overflow-hidden hover:bg-white transition-colors duration-300">
+                        <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(white 1px, transparent 1px); background-size: 20px 20px;"></div>
                         <div class="absolute inset-0 flex flex-col justify-between p-8 z-10">
                             <div class="flex justify-between items-start">
-                                <svg class="w-12 h-12 text-white group-hover:text-black transition-colors duration-300"
-                                    viewBox="0 0 150 150" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path
-                                        d="M31.6984 0L0 118.302L118.302 150L150 31.6984L31.6984 0ZM87.1031 95.9652L54.0454 87.1031L62.9075 54.0454L95.9784 62.9075L87.1031 95.9652Z"
-                                        fill="currentColor" />
+                                <svg class="w-12 h-12 text-white group-hover:text-black transition-colors duration-300" viewBox="0 0 150 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M31.6984 0L0 118.302L118.302 150L150 31.6984L31.6984 0ZM87.1031 95.9652L54.0454 87.1031L62.9075 54.0454L95.9784 62.9075L87.1031 95.9652Z" fill="currentColor" />
                                 </svg>
                                 <div class="flex items-center gap-2">
                                     <span class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></span>
-                                    <span
-                                        class="bg-white text-black px-2 font-bold text-xs font-mono py-1 group-hover:bg-black group-hover:text-white transition-colors">LIVE
-                                        STATUS</span>
+                                    <span class="bg-white text-black px-2 font-bold text-xs font-mono py-1 group-hover:bg-black group-hover:text-white transition-colors">LIVE STATUS</span>
                                 </div>
                             </div>
-
                             <div class="flex justify-between items-end">
                                 <div>
-                                    <h3
-                                        class="text-4xl font-black text-white mb-2 group-hover:text-black transition-colors duration-300">
-                                        SERVEUR ROBLOX</h3>
-                                    <p
-                                        class="font-mono text-sm text-gray-400 group-hover:text-black/80 transition-colors duration-300">
-                                        Rejoignez la ville d'Albi maintenant.</p>
+                                    <h3 class="text-4xl font-black text-white mb-2 group-hover:text-black transition-colors duration-300">SERVEUR ROBLOX</h3>
+                                    <p class="font-mono text-sm text-gray-400 group-hover:text-black/80 transition-colors duration-300">Rejoignez la ville d'Albi maintenant.</p>
                                 </div>
-                                <span
-                                    class="bg-white text-black px-6 py-2 font-black uppercase text-sm border-2 border-transparent group-hover:border-black group-hover:bg-transparent group-hover:text-black transition-all">
+                                <span class="bg-white text-black px-6 py-2 font-black uppercase text-sm border-2 border-transparent group-hover:border-black group-hover:bg-transparent group-hover:text-black transition-all">
                                     CONNECT
                                 </span>
                             </div>
@@ -3296,26 +3433,16 @@ Date : 2025-12-21
                     </a>
 
                     <a href="mailto:contact@albirp.com"
-                        class="md:col-span-1 group relative h-64 border-4 border-gray-500 bg-black overflow-hidden hover:bg-gray-500 transition-colors duration-300">
-                        <div
-                            class="absolute inset-0 opacity-10 bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,#ffffff_10px,#ffffff_12px)]">
-                        </div>
-
+                        class="md:col-span-1 xl:col-span-1 group relative h-64 border-4 border-gray-500 bg-black overflow-hidden hover:bg-gray-500 transition-colors duration-300">
+                        <div class="absolute inset-0 opacity-10 bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,#ffffff_10px,#ffffff_12px)]"></div>
                         <div class="absolute inset-0 flex flex-col justify-between p-8 z-10">
                             <div class="flex justify-between items-start">
-                                <i
-                                    class="ri-mail-send-fill text-5xl text-gray-500 group-hover:text-white transition-colors duration-300"></i>
-                                <span
-                                    class="bg-gray-500 text-white px-2 font-bold text-xs font-mono py-1 group-hover:bg-white group-hover:text-gray-500 transition-colors">SUPPORT</span>
+                                <i class="ri-mail-send-fill text-5xl text-gray-500 group-hover:text-white transition-colors duration-300"></i>
+                                <span class="bg-gray-500 text-white px-2 font-bold text-xs font-mono py-1 group-hover:bg-white group-hover:text-gray-500 transition-colors">SUPPORT</span>
                             </div>
-
                             <div>
-                                <h3
-                                    class="text-3xl font-black text-white mb-1 group-hover:text-white transition-colors duration-300">
-                                    CONTACT</h3>
-                                <p
-                                    class="font-mono text-xs text-gray-400 group-hover:text-white/90 transition-colors duration-300">
-                                    contact@albirp.com</p>
+                                <h3 class="text-3xl font-black text-white mb-1 group-hover:text-white transition-colors duration-300">CONTACT</h3>
+                                <p class="font-mono text-xs text-gray-400 group-hover:text-white/90 transition-colors duration-300">contact@albirp.com</p>
                             </div>
                         </div>
                     </a>
@@ -3865,7 +3992,7 @@ Contact Presse : contact@albirp.com
 
     <!-- Footer -->
     <footer class="border-t-8 border-black pt-20 pb-10 px-4 footer-contrast"
-        style="background-color: var(--color-accent);">
+        style="background-color: var(--color-accent); position: relative;">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start">
             <div class="mb-10 md:mb-0">
                 <h1 class="text-6xl font-medieval mb-4 footer-title">ALBI RP™</h1>
@@ -4014,6 +4141,8 @@ Contact Presse : contact@albirp.com
                 })();
             </script>
         </section>
+
+        <div class="shadow-[0_-10px_40px_rgba(0,0,0,0.8)]"></div>
     </footer>
 
     <!-- Script de logs -->
@@ -4074,7 +4203,7 @@ Contact Presse : contact@albirp.com
             'lore': {
                 path: ['ROOT', 'ARCHIVES', 'T.A.R.N_HISTORY'],
                 cmd: 'decrypt_data --force',
-                color: 'text-albi-red',
+                color: 'text-ALBI-red',
                 status: 'RESTRICTED'
             },
             'factions': {
@@ -4877,11 +5006,11 @@ Contact Presse : contact@albirp.com
             // 4. Gestion du Thème de couleur selon la page
             setTimeout(() => {
                 // Reset classes
-                document.body.classList.remove('theme-albi', 'theme-data', 'theme-shop', 'theme-vote', 'theme-socials');
+                document.body.classList.remove('theme-ALBI', 'theme-data', 'theme-shop', 'theme-vote', 'theme-socials');
 
                 // Appliquer le thème spécifique
                 if (viewId === 'lore' || viewId === 'factions' || viewId === 'jobs') {
-                    document.body.classList.add('theme-albi'); // Rouge/Brique
+                    document.body.classList.add('theme-ALBI'); // Rouge/Brique
                 } else if (viewId === 'whitelist' || viewId === 'rules') {
                     document.body.classList.add('theme-data'); // Vert/Terminal
                 } else if (viewId === 'shop') {
@@ -4969,7 +5098,7 @@ Contact Presse : contact@albirp.com
             const disclaimerText = document.getElementById('disclaimer-text');
             if (!disclaimerText) return;
 
-            // Version 1 : Juridiquement Carrée (pour theme-albi et défaut)
+            // Version 1 : Juridiquement Carrée (pour theme-ALBI et défaut)
             const version1 = 'Projet indépendant, non affilié à la Ville d\'Albi ni au Conseil Départemental du Tarn.';
 
             // Version 2 : Néo-Brutalist (pour theme-shop, theme-vote, theme-socials)
@@ -4989,7 +5118,7 @@ Contact Presse : contact@albirp.com
                 body.classList.contains('theme-socials')) {
                 selectedVersion = version2; // Néo-Brutalist pour les thèmes stylés
             } else {
-                selectedVersion = version1; // Juridiquement Carrée pour theme-albi et défaut
+                selectedVersion = version1; // Juridiquement Carrée pour theme-ALBI et défaut
             }
 
             disclaimerText.textContent = selectedVersion;
@@ -5707,7 +5836,6 @@ Contact Presse : contact@albirp.com
         };
         });
     </script>
-
     <!-- Script de recherche en temps réel des règles -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -6714,32 +6842,6 @@ Contact Presse : contact@albirp.com
         });
     </script>
 
-    <!-- SYSTÈME DE MONITORING RÉSOLUTION -->
-    <script>
-        // --- SYSTÈME DE MONITORING RÉSOLUTION ---
-        const resDisplay = document.getElementById('current-res');
-
-        function updateResMonitor() {
-            if (resDisplay) {
-                const w = window.innerWidth;
-                const h = window.innerHeight;
-                resDisplay.innerText = `CURRENT: ${w}x${h}`;
-
-                // Change la couleur si critique
-                if (w < 375 || h < 500) {
-                    resDisplay.style.color = 'red';
-                    resDisplay.style.fontWeight = 'bold';
-                } else {
-                    resDisplay.style.color = 'green';
-                }
-            }
-        }
-
-        window.addEventListener('resize', updateResMonitor);
-        // Init
-        updateResMonitor();
-    </script>
-
     <!-- SYSTÈME DE FILTRE JOBS -->
     <script>
         // --- SYSTÈME DE FILTRE JOBS ---
@@ -7080,7 +7182,7 @@ Contact Presse : contact@albirp.com
             originalContent.classList.add('animate-scroll');
             clonedContent.classList.add('animate-scroll');
         });
-    </script>
+    </script>    
     <script>
         (function () {
             let originalTitle = document.title;
@@ -7382,148 +7484,7 @@ Contact Presse : contact@albirp.com
         </div>
     </div>
 
-    <!-- Preloader -->
-    <script>
-        // --- ISOLATED PRELOADER ---
-        (function () {
-            const preloader = document.getElementById('preloader');
-            const loaderBar = document.getElementById('loader-bar');
-            const loaderText = document.getElementById('loader-text');
-
-            if (!preloader) return;
-
-            // Configuration
-            const minTime = 1500; // Temps mini pour l'animation
-            const maxTime = 8000; // Temps maxi (Sécurité)
-            const start = Date.now();
-            let dismissed = false;
-
-            // Animation visuelle fake
-            let progress = 0;
-            const interval = setInterval(() => {
-                progress += Math.random() * 10;
-                if (progress > 95) progress = 95; // On attend la fin réelle pour le 100%
-
-                if (loaderBar) loaderBar.style.width = `${progress}%`;
-            }, 100);
-
-            // Fonction de fermeture
-            function dismiss() {
-                if (dismissed) return;
-                dismissed = true;
-                clearInterval(interval);
-
-                const elapsed = Date.now() - start;
-                const remaining = Math.max(0, minTime - elapsed);
-
-                setTimeout(() => {
-                    // 100% Visuel
-                    if (loaderBar) loaderBar.style.width = '100%';
-                    if (loaderText) loaderText.innerText = "SYSTEM READY.";
-
-                    // Disparition
-                    preloader.style.transition = "opacity 0.6s ease, transform 0.6s ease";
-                    preloader.style.opacity = "0";
-                    preloader.style.pointerEvents = "none";
-
-                    // Suppression du DOM
-                    setTimeout(() => preloader.style.display = "none", 600);
-                }, remaining);
-            }
-
-            // Déclencheurs
-            window.addEventListener('load', dismiss);       // Normal
-            setTimeout(dismiss, maxTime);                   // Secours
-        })();
-    </script>
-    <script>
-        // --- CONFIGURATION DE VOS LIENS (REMPLISSEZ ICI) ---
-        const ALBI_LINKS = {
-            // Le lien principal de votre jeu Roblox
-            roblox_game: "https://www.roblox.com/games/123456789/ALBI-RP-FRANCE-WHITELIST",
-
-            // Vos réseaux
-            discord: "https://discord.gg/eVn8pKYwQy",
-            twitter: "https://twitter.com/AlbiRP_Officiel",
-            instagram: "https://instagram.com/albirp_roblox",
-            tiktok: "https://tiktok.com/@albirp_fr",
-
-            // Sites de vote
-            vote_top_serveurs: "https://top-serveurs.net/roblox/vote/albi-rp",
-            vote_tracky: "https://trackyserver.com/server/albi-rp",
-
-            // Contact
-            email: "contact@albirp.com"
-        };
-
-        document.addEventListener('DOMContentLoaded', () => {
-            console.log("🔗 LINK MANAGER: Hydratation des liens en cours...");
-
-            // 1. BOUTONS "JOUER" (Navbar & Hero)
-            // On cible tous les boutons qui contiennent le texte "JOUER" ou l'icône manette
-            const playButtons = document.querySelectorAll('button[data-tooltip*="Jouer"], button[onclick*="roblox"]');
-            playButtons.forEach(btn => {
-                // On remplace le comportement par défaut
-                btn.onclick = function (e) {
-                    e.preventDefault();
-                    window.open(ALBI_LINKS.roblox_game, '_blank');
-                };
-                // Met à jour le tooltip
-                btn.setAttribute('data-tooltip', 'Ouvrir Roblox (PC/Mobile)');
-            });
-
-            // 2. PAGE SOCIALS (Mise à jour intelligente par détection d'icône)
-            const socialSection = document.getElementById('view-socials');
-            if (socialSection) {
-                // Twitter
-                const twBtn = socialSection.querySelector('.ri-twitter-x-fill')?.closest('a');
-                if (twBtn) twBtn.href = ALBI_LINKS.twitter;
-
-                // Instagram
-                const instaBtn = socialSection.querySelector('.ri-instagram-fill')?.closest('a');
-                if (instaBtn) instaBtn.href = ALBI_LINKS.instagram;
-
-                // TikTok
-                const tiktokBtn = socialSection.querySelector('.ri-tiktok-fill')?.closest('a');
-                if (tiktokBtn) tiktokBtn.href = ALBI_LINKS.tiktok;
-
-                // Discord (Gros bloc)
-                const discordBtn = socialSection.querySelector('.ri-discord-fill')?.closest('a');
-                if (discordBtn) discordBtn.href = ALBI_LINKS.discord;
-
-                // Roblox (Gros bloc)
-                // On cherche le lien qui contient le SVG Roblox ou le texte "SERVEUR ROBLOX"
-                const rblxLinks = socialSection.querySelectorAll('a');
-                rblxLinks.forEach(link => {
-                    if (link.innerHTML.includes('SERVEUR ROBLOX') || link.innerHTML.includes('CONNECT')) {
-                        link.href = ALBI_LINKS.roblox_game;
-                    }
-                });
-
-                // Mail
-                const mailBtn = socialSection.querySelector('.ri-mail-send-fill')?.closest('a');
-                if (mailBtn) mailBtn.href = `mailto:${ALBI_LINKS.email}`;
-            }
-
-            // 3. PAGE VOTE (Redirection dynamique)
-            // On écrase la fonction handleVote pour utiliser nos liens de config
-            window.handleVote = function (target) {
-                let finalUrl = target; // Par défaut
-
-                // Si l'argument est un mot-clé, on utilise la config
-                if (target.includes('top-serveurs')) finalUrl = ALBI_LINKS.vote_top_serveurs;
-                if (target.includes('tracky')) finalUrl = ALBI_LINKS.vote_tracky;
-                if (target.includes('discord')) finalUrl = ALBI_LINKS.discord;
-
-                toastManager.show("REDIRECTION...", "Ouverture de la page de vote.");
-                setTimeout(() => {
-                    window.open(finalUrl, '_blank');
-                }, 800);
-            };
-
-            console.log("✅ LINK MANAGER: Liens mis à jour avec succès.");
-        });
-    </script>
+    <!-- Live Widget -->
     <div id="live-widget" class="fixed bottom-6 left-6 z-[9999] transition-all duration-1000 opacity-0 translate-y-4 mix-blend-difference pointer-events-none hidden md:flex items-center gap-4">
         <div class="relative flex h-3 w-3">
             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#2563EB] opacity-75"></span>
@@ -7534,7 +7495,6 @@ Contact Presse : contact@albirp.com
             <span id="live-count" class="transition-opacity duration-300">CONNECTING...</span> ONLINE
         </span>
     </div>
-
     <script>
         (function() {
             const countEl = document.getElementById('live-count');
@@ -7582,11 +7542,8 @@ Contact Presse : contact@albirp.com
             setInterval(fetchLiveCount, REFRESH_RATE);
         })();
     </script>
-    <!-- Vercel Analytics -->
-    <script type="module">
-        import { inject } from 'https://esm.sh/@vercel/analytics';
-        inject();
-    </script>
+
+    <!-- Trailer Modal -->
     <div id="trailer-modal" class="fixed inset-0 z-[200000] hidden bg-black/95 flex-col items-center justify-center p-4 backdrop-blur-md transition-opacity duration-300">
         
         <div class="relative w-full max-w-5xl aspect-video border-4 border-white shadow-[0_0_50px_rgba(255,255,255,0.2)] bg-black mb-6">
@@ -7614,7 +7571,6 @@ Contact Presse : contact@albirp.com
             </a>
         </div>
     </div>
-
     <script>
         function openTrailer() {
             const modal = document.getElementById('trailer-modal');
@@ -7648,8 +7604,9 @@ Contact Presse : contact@albirp.com
             modal.classList.remove('flex');
         }
     </script>
-    <!-- Cookie Consent Manager (Patch 2) -->
-    <div id="cookie-consent" class="fixed bottom-0 left-0 w-full bg-black border-t-4 border-brand-main z-[200000] transform translate-y-full transition-transform duration-500 shadow-[0_-10px_40px_rgba(0,0,0,0.8)]">
+    
+    <!-- Cookie Consent Manager -->
+    <div id="cookie-consent" class="fixed bottom-0 left-0 w-full bg-black border-t-4 border-brand-main z-[99999] transform translate-y-full transition-transform duration-500 shadow-[0_-10px_40px_rgba(0,0,0,0.8)]">
         
         <div id="cookie-main-view" class="p-6 flex flex-col md:flex-row justify-between items-center gap-6">
             <div class="max-w-4xl">
@@ -7657,11 +7614,11 @@ Contact Presse : contact@albirp.com
                     <i class="ri-shield-keyhole-fill text-brand-main"></i> PROTOCOLE DE TRAÇAGE
                 </h3>
                 <p class="font-mono text-xs text-gray-300 text-justify leading-relaxed">
-                    Nous utilisons des traceurs pour assurer le fonctionnement du terminal (Session ID) et mesurer l'audience via <span class="text-white font-bold">Vercel Analytics</span>. 
-                    Vous pouvez configurer vos préférences ci-dessous.
+                    Nous utilisons des traceurs aussi appelé 🍪 pour assurer le fonctionnement du terminal (Session ID) et mesurer l'audience via <span class="text-white font-bold">Vercel Analytics</span>. 
+                    Vous pouvez configurer vos préférences <span class="text-white font-bold cursor-pointer hidden md:inline" onclick="CookieManager.toggleSettings()">ci-contre</span><span class="text-white font-bold cursor-pointer md:hidden" onclick="CookieManager.toggleSettings()">ci-dessous</span>.
                 </p>
             </div>
-            <div class="flex flex-wrap gap-3 shrink-0 justify-center md:justify-end w-full md:w-auto">
+            <div class="flex flex-wrap lg:flex-row xs:flex-col gap-3 shrink-0 justify-center md:justify-end w-full md:w-auto">
                 <button onclick="CookieManager.denyAll()" class="px-4 py-2 border-2 border-red-500 text-red-500 font-bold hover:bg-red-500 hover:text-white transition-colors uppercase text-xs">
                     REFUSER TOUT
                 </button>
@@ -7698,7 +7655,9 @@ Contact Presse : contact@albirp.com
                 </div>
 
                 <div class="flex justify-end gap-4 mt-6 pt-4 border-t border-gray-800">
-                    <button onclick="CookieManager.toggleSettings()" class="text-gray-500 hover:text-white underline">RETOUR</button>
+                    <button onclick="CookieManager.toggleSettings()" class="px-6 py-2 bg-white text-black font-bold border-2 border-transparent hover:bg-brand-main hover:border-black transition-all uppercase text-xs">
+                        RETOUR
+                    </button>
                     <button onclick="CookieManager.savePreferences()" class="px-6 py-2 bg-white text-black font-bold border-2 border-transparent hover:bg-brand-main hover:border-black transition-all uppercase text-xs">
                         ENREGISTRER MES CHOIX
                     </button>
@@ -7706,7 +7665,6 @@ Contact Presse : contact@albirp.com
             </div>
         </div>
     </div>
-
     <script>
         const CookieManager = {
             banner: document.getElementById('cookie-consent'),
@@ -7787,6 +7745,10 @@ Contact Presse : contact@albirp.com
                 
                 // Fermeture UI
                 this.banner.classList.add('translate-y-full');
+                setTimeout(() => {
+                    
+                    this.banner.classList.add('hidden');
+                }, 500);
                 
                 // Feedback
                 showToast('SYSTÈME', msg, type);
@@ -7808,6 +7770,12 @@ Contact Presse : contact@albirp.com
 
         // Démarrage
         document.addEventListener('DOMContentLoaded', () => CookieManager.init());
+    </script>
+
+    <!-- Vercel Analytics -->
+    <script type="module">
+        import { inject } from 'https://esm.sh/@vercel/analytics';
+        inject();
     </script>
 </body>
 
