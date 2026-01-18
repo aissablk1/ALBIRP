@@ -4063,8 +4063,6 @@ Contact Presse : contact@albirp.com
                         class="footer-link hover:translate-x-2 transition-transform">ESPACE PRESSE</a>
                     <a href="#" onclick="router('events'); return false;"
                         class="footer-link hover:translate-x-2 transition-transform">EVENTS</a>
-                    <a href="#" onclick="router('changelog'); return false;" 
-                        class="footer-link hover:translate-x-2 transition-transform">CHANTIER & MAJ</a>
                 </div>
             </div>
         </div>
@@ -4746,40 +4744,179 @@ Contact Presse : contact@albirp.com
 
             // 10. AudioContext Fingerprinting
             try {
-                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                // Use OfflineAudioContext for fingerprinting - Silent, faster, no permissions needed, no deprecation warnings
+                const AudioContext = window.OfflineAudioContext || window.webkitOfflineAudioContext;
                 if (AudioContext) {
-                    const context = new AudioContext();
+                    // Create minimal context: 1 channel, 44100 length (1s), 44100 sample rate
+                    const context = new AudioContext(1, 44100, 44100);
+                    
                     const oscillator = context.createOscillator();
-                    const analyser = context.createAnalyser();
-                    const gainNode = context.createGain();
-                    const scriptProcessor = context.createScriptProcessor(4096, 1, 1);
-
-                    gainNode.gain.value = 0;
-                    oscillator.connect(analyser);
-                    analyser.connect(scriptProcessor);
-                    scriptProcessor.connect(gainNode);
-                    gainNode.connect(context.destination);
+                    oscillator.type = 'triangle';
+                    oscillator.frequency.value = 10000;
+                    
+                    const compressor = context.createDynamicsCompressor();
+                    compressor.threshold.value = -50;
+                    compressor.knee.value = 40;
+                    compressor.ratio.value = 12;
+                    compressor.reduction.value = -20;
+                    compressor.attack.value = 0;
+                    compressor.release.value = 0.25;
+                    
+                    oscillator.connect(compressor);
+                    compressor.connect(context.destination);
+                    
                     oscillator.start(0);
-
-                    const audioFingerprint = [];
-                    scriptProcessor.onaudioprocess = (e) => {
-                        const input = e.inputBuffer.getChannelData(0);
-                        let sum = 0;
-                        for (let i = 0; i < input.length; i++) {
-                            sum += Math.abs(input[i]);
-                        }
-                        audioFingerprint.push(sum.toString());
-                    };
-
-                    // Attendre un court instant pour collecter les données audio
-                    await new Promise(resolve => setTimeout(resolve, 100));
-
-                    oscillator.stop();
-                    context.close();
-                    fingerprint.push(audioFingerprint.join(','));
+                    
+                    // Render audio
+                    const buffer = await context.startRendering();
+                    const data = buffer.getChannelData(0);
+                    
+                    // Calculate quick hash of the audio buffer
+                    let sum = 0;
+                    for (let i = 0; i < 4500; i++) {
+                         sum += Math.abs(data[i]);
+                    }
+                    fingerprint.push(sum.toString());
                 }
             } catch (e) {
                 fingerprint.push('audio-error');
+            }
+
+            // --- SYSTEM AUDIO & SPATIAL ENGINE ---
+            // Implémentation isolée pour ne pas interférer avec le fingerprinting
+            // Gestionnaire Audio Global avec support Dolby/Spatial Audio
+            if (!window.SystemAudio) {
+                window.SystemAudio = class {
+                    constructor() {
+                        this.initialized = false;
+                        this.context = null;
+                        this.masterGain = null;
+                        this.spatialChain = null;
+                        this.sounds = {};
+                        
+                         // Configuration Spatial Audio (Dolby-like)
+                        this.config = {
+                            spatial: true,
+                            width: 0.8, // Largeur stéréo
+                            compression: true
+                        };
+
+                        this.init = this.init.bind(this);
+                        this.play = this.play.bind(this);
+                        
+                        // Auto-init on first interaction
+                        ['click', 'keydown', 'touchstart'].forEach(evt => 
+                            document.addEventListener(evt, this.init, { once: true })
+                        );
+                    }
+
+                    async init() {
+                        if (this.initialized) return;
+                        
+                        try {
+                            const AudioContext = window.AudioContext || window.webkitAudioContext;
+                            if (!AudioContext) return;
+
+                            this.context = new AudioContext();
+                            
+                            // Master Routing
+                            this.masterGain = this.context.createGain();
+                            this.masterGain.gain.value = 0.8; // Safe volume
+
+                            // Spatial Chain Setup (Simulated 3D/Clean Enhancement)
+                            // 1. Dynamics Compressor (Cinematic feel + Protection)
+                            const compressor = this.context.createDynamicsCompressor();
+                            compressor.threshold.value = -24;
+                            compressor.knee.value = 30;
+                            compressor.ratio.value = 12;
+                            compressor.attack.value = 0.003;
+                            compressor.release.value = 0.25;
+
+                            // Connect Chain
+                            this.masterGain.connect(compressor);
+                            compressor.connect(this.context.destination);
+
+                            this.initialized = true;
+                            
+                            // Resume if suspended (browser policy)
+                            if (this.context.state === 'suspended') {
+                                await this.context.resume();
+                            }
+                            
+                            Debug.log("AUDIO", "SystemAudio: Engine Started (Dolby/Spatial Ready)");
+                            
+                        } catch (e) {
+                            console.warn("SystemAudio: Init failed", e);
+                        }
+                    }
+
+                    // Jouer un son synthétisé (pas de fichier requis)
+                    // type: 'click', 'hover', 'success', 'error', 'scan'
+                    play(type = 'click', pan = 0) {
+                        if (!this.initialized || !this.context) return;
+                        if (this.context.state === 'suspended') this.context.resume();
+
+                        const t = this.context.currentTime;
+                        const osc = this.context.createOscillator();
+                        const gain = this.context.createGain();
+                        const panner = this.context.createStereoPanner();
+
+                        // Routing: Osc -> Gain -> Panner -> Master
+                        osc.connect(gain);
+                        gain.connect(panner);
+                        panner.connect(this.masterGain);
+
+                        // Spatial Position (-1 left to 1 right)
+                        panner.pan.setValueAtTime(pan, t);
+
+                        // Sound Synthesis Definitions
+                        switch (type) {
+                            case 'click':
+                                osc.type = 'sine';
+                                osc.frequency.setValueAtTime(800, t);
+                                osc.frequency.exponentialRampToValueAtTime(1200, t + 0.05);
+                                gain.gain.setValueAtTime(0.3, t);
+                                gain.gain.exponentialRampToValueAtTime(0.01, t + 0.05);
+                                osc.start(t);
+                                osc.stop(t + 0.05);
+                                break;
+                                
+                            case 'hover':
+                                osc.type = 'triangle';
+                                osc.frequency.setValueAtTime(400, t);
+                                gain.gain.setValueAtTime(0.05, t);
+                                gain.gain.linearRampToValueAtTime(0, t + 0.03);
+                                osc.start(t);
+                                osc.stop(t + 0.03);
+                                break;
+                                
+                            case 'success':
+                                // Jingle positif
+                                osc.type = 'sine';
+                                osc.frequency.setValueAtTime(600, t);
+                                osc.frequency.setValueAtTime(800, t + 0.1);
+                                gain.gain.setValueAtTime(0.2, t);
+                                gain.gain.linearRampToValueAtTime(0, t + 0.3);
+                                osc.start(t);
+                                osc.stop(t + 0.3);
+                                break;
+
+                            case 'error':
+                                // Low buzz
+                                osc.type = 'sawtooth';
+                                osc.frequency.setValueAtTime(150, t);
+                                osc.frequency.linearRampToValueAtTime(100, t + 0.2);
+                                gain.gain.setValueAtTime(0.2, t);
+                                gain.gain.exponentialRampToValueAtTime(0.01, t + 0.2);
+                                osc.start(t);
+                                osc.stop(t + 0.2);
+                                break;
+                        }
+                    }
+                };
+                
+                // Initialize Global Instance
+                window.audioEngine = new window.SystemAudio();
             }
 
             // 11. Plugins
